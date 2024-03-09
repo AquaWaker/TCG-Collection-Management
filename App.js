@@ -1,8 +1,11 @@
 import 'react-native-gesture-handler';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Pressable, Image} from 'react-native';
+import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Pressable, Image} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Decks } from './Decks';
+
+const dummyData = require('./dummyData.json');
 
 function HomeScreen() {
   return (
@@ -24,13 +27,9 @@ function SearchResults() {
   )  
 }
 
-function Decks() {
+function DecksPage() {
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text>Decks</Text>
-      </View>
-    </SafeAreaView>
+    <Decks></Decks>
   )  
 }
 
@@ -72,7 +71,7 @@ export default function App() {
         />
         <Drawer.Screen 
           name="Decks" 
-          component={Decks}
+          component={DecksPage}
           options= {{
             title: 'Decks',
             headerStyle: {
@@ -97,4 +96,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  deckGrid: {
+    flex: 5,
+  },
+  deckButtonSpace: {
+    flex: 1,
+  },
+  deckButton: {
+    flex: 1,
+
+  }
 });

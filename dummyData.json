@@ -1,0 +1,54 @@
+{
+    "Cards": [
+        {
+            "name": "Command and Conquer",
+            "setid": "ARC",
+            "id": 159,
+            "cost": 2,
+            "copies": 3,
+            "image": "https://d2h5owxb2ypf43.cloudfront.net/cards/ARC159.webp",
+            "price": "$90"
+        },
+        {
+            "name": "Sol Ring",
+            "setid": "SLD",
+            "id": 1494,
+            "cost": 1,
+            "copies": 1,
+            "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
+            "price": "$30"
+        }
+    ],
+    "Decks": [
+        {
+            "name": "New Deck",
+            "game": "Flesh and Blood",
+            "cards": [
+                {
+                    "name": "Command and Conquer",
+                    "setid": "ARC",
+                    "id": 159,
+                    "cost": 2,
+                    "copies": 3,
+                    "image": "https://d2h5owxb2ypf43.cloudfront.net/cards/ARC159.webp",
+                    "price": "$90"
+                }
+            ]
+        },
+        {
+            "name": "Commander Deck",
+            "game": "Magic the Gathering",
+            "cards": [
+                {
+                    "name": "Sol Ring",
+                    "setid": "SLD",
+                    "id": 1494,
+                    "cost": 1,
+                    "copies": 1,
+                    "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
+                    "price": "$30"
+                }
+            ]
+        }
+    ]
+}
