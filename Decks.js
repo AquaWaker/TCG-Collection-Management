@@ -1,19 +1,29 @@
 import React, {useState} from 'react';
 import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Image, TextInput} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { AntDesign } from '@expo/vector-icons';
+
 
 export const Decks = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [isSelected, setSelection] = useState(false);
     const [DeckName, onChangeDeckName] = React.useState('New Deck');
     const [GameName, onChangeGameName] = React.useState('Game Name');
     const dummyData = require('./dummyData.json');
+    const [deckModalVisible, setDeckModalVisible] = useState(false);
+    const [currentDeck, setCurrentDeck] = useState(require('./empty.json'));
 
     function addNewDeck () {
         dummyData.Decks.push({ "name": DeckName, "game": GameName, "cards": []});
         onChangeDeckName("New Deck");
-        onChangeGameName("Game Name");
+        onChangeGameName("Game");
         setModalVisible(!modalVisible);
+    }
+
+    function deckPopupSetup (deck) {
+        setCurrentDeck(deck);
+        setDeckModalVisible(true);
     }
 
     return (
@@ -60,17 +70,65 @@ export const Decks = () => {
                     </View>
                 </View>
             </Modal>
+
+            <Modal
+            animationType="fade"
+            transparent={true}
+            visible={deckModalVisible}
+            onRequestClose={() => {
+                Alert.alert('Modal has been closed.');
+                setDeckModalVisible(!deckModalVisible);
+            }}>
+                <View style={styles.centeredDeckView}>
+                    <View style={styles.backButton}>
+                        <Pressable onPress={() => setDeckModalVisible(!deckModalVisible)}>
+                            <AntDesign name="arrowleft" size={24} color="white" />
+                        </Pressable>
+                    </View>
+                    <View style={{flexDirection: 'row', width: '90%'}}>
+                        <Text style={styles.logoDeckText}>LOGO</Text>
+                        <View>
+                            <Text style={styles.deckNamePopup}>{currentDeck.name}</Text>
+                            <View style={{width: '80%'}}>
+                                <Text style={styles.deckDesPopup}>{currentDeck.description}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    
+                    <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 15}}>
+                        <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
+                        <View>
+                            <Text style={{width: 50, textAlign: 'center', color: 'white'}}>Cards</Text>
+                        </View>
+                        <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
+                    </View>
+
+                    <View style={{width: '90%', height: '75%'}}>
+                        <FlatList
+                            data = {currentDeck.cards}
+                            renderItem={({ item }) =>
+                            <View style={styles.cardList}>
+                                <Text style={styles.cardText}>{item.name}</Text>
+                            </View>
+                            }
+                        />
+                    </View>
+                </View>
+            </Modal>
+
             <View style={styles.deckGrid}>
                 <FlatList
                     data = {dummyData.Decks}
                     renderItem={({ item }) =>
-                    <View style={styles.deckBox}>
-                        <Text style={styles.logoText}>LOGO</Text>
-                        <View>
-                            <Text>{item.name}</Text>
-                            <Text>{item.game}</Text>
+                    <Pressable onPress={() => deckPopupSetup(item)}>
+                        <View style={styles.deckBox}>
+                            <Text style={styles.logoText}>LOGO</Text>
+                            <View>
+                                <Text>{item.name}</Text>
+                                <Text>{item.game}</Text>
+                            </View>
                         </View>
-                    </View>
+                    </Pressable>
                     }
                 />
             </View>
@@ -173,5 +231,44 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 8,
         borderColor: 'black',
+    },
+    centeredDeckView: {
+        height: '75%',
+        width: '100%',
+        backgroundColor: '#586F7C',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 90,
+    },
+    backButton: {
+        justifyContent: 'flex-end',
+        marginVertical: 10,
+    },
+    checkbox: {
+        alignSelf: 'center',
+    },
+    logoDeckText: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: 'white',
+        marginRight: 10,
+    }, 
+    cardText: {
+        fontSize: 15,
+        color: 'white',
+        textAlign: 'left',
+    }, 
+    deckNamePopup: {
+        color: 'white',
+        fontSize: 20,
+    },
+    deckDesPopup: {
+        color: 'white',
+        fontSize: 15,
+    }, 
+    cardList: {
+        flexDirection: 'row', 
+        justifyContent: 'flex-start', 
+        width: '90%',
     }
 });

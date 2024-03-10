@@ -23,6 +23,7 @@
         {
             "name": "New Deck",
             "game": "Flesh and Blood",
+            "description": "A fun little list of good cards I have for all decks",
             "cards": [
                 {
                     "name": "Command and Conquer",
@@ -38,11 +39,30 @@
         {
             "name": "Commander Deck",
             "game": "Magic the Gathering",
+            "description": "All commander decks start with Sol Ring",
             "cards": [
                 {
                     "name": "Sol Ring",
                     "setid": "SLD",
-                    "id": 1494,
+                    "id": 1494, git
+                    "cost": 1,
+                    "copies": 1,
+                    "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
+                    "price": "$30"
+                },
+                {
+                    "name": "Island",
+                    "setid": "SLD",
+                    "id": 1495,
+                    "cost": 1,
+                    "copies": 1,
+                    "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
+                    "price": "$30"
+                },
+                {
+                    "name": "Swamp",
+                    "setid": "SLD",
+                    "id": 1496,
                     "cost": 1,
                     "copies": 1,
                     "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
