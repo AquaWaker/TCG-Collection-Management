@@ -32,9 +32,12 @@ export const Decks = () => {
                 <FlatList
                     data = {dummyData.Decks}
                     renderItem={({ item }) =>
-                    <View>
-                        <Text>{item.name}</Text>
-                        <Text>{item.game}</Text>
+                    <View style={styles.deckBox}>
+                        <Text style={styles.logoText}>LOGO</Text>
+                        <View>
+                            <Text>{item.name}</Text>
+                            <Text>{item.game}</Text>
+                        </View>
                     </View>
                     }
                 />
@@ -42,7 +45,7 @@ export const Decks = () => {
             <View style={styles.deckButtonSpace}>
                 <Pressable onPress={() => setModalVisible(true)}>
                     <View style={[styles.button, styles.deckButton]}>
-                        <Text style={styles.buttonText}>+ Add</Text>
+                        <Text style={styles.buttonText}>+ Create New Deck</Text>
                     </View>
                 </Pressable>
             </View>
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     deckGrid: {
-        flex: 5,
+        flex: 12,
     },
     deckButtonSpace: {
         flex: 1,
@@ -69,12 +72,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
     }, 
+    logoText: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: 'white',
+    }, 
     centeredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 22,
-      },
+    },
     modalView: {
         margin: 20,
         backgroundColor: 'white',
@@ -110,4 +118,11 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
     },
+    deckBox: {
+        borderWidth: 5,
+        flexDirection: 'row', 
+        padding: 50,
+        marginVertical: 8,
+        marginHorizontal: 16,
+    }
 });
