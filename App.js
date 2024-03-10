@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Decks } from './Decks';
+import { SearchResultsPage } from './SearchResultsPage';
 
 const dummyData = require('./dummyData.json');
 
@@ -19,11 +20,7 @@ function HomeScreen() {
 
 function SearchResults() {
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text>SearchResults</Text>
-      </View>
-    </SafeAreaView>
+    <SearchResultsPage></SearchResultsPage>
   )  
 }
 
