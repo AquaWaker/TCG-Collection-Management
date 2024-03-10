@@ -1,11 +1,20 @@
 import React, {useState} from 'react';
-import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Pressable, Image} from 'react-native';
+import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Image, TextInput} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
 export const Decks = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [DeckName, onChangeDeckName] = React.useState('New Deck');
+    const [GameName, onChangeGameName] = React.useState('Game Name');
     const dummyData = require('./dummyData.json');
+
+    function addNewDeck () {
+        dummyData.Decks.push({ "name": DeckName, "game": GameName, "cards": []});
+        onChangeDeckName("New Deck");
+        onChangeGameName("Game Name");
+        setModalVisible(!modalVisible);
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -20,11 +29,34 @@ export const Decks = () => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>Create New Deck</Text>
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => setModalVisible(!modalVisible)}>
-                            <Text style={styles.textStyle}>Finish</Text>
-                        </Pressable>
+                        <View>
+                            <Text style={styles.inputTitles}>Deck Name</Text>
+                            <TextInput
+                                style={styles.inputBox}
+                                onChangeText={onChangeDeckName}
+                                value={DeckName}
+                                placeholder="New Deck"
+                            />
+                            <Text style={styles.inputTitles}>Game Name</Text>
+                            <TextInput
+                                style={styles.inputBox}
+                                onChangeText={onChangeGameName}
+                                value={GameName}
+                                placeholder="Game"
+                            />
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => addNewDeck()}>
+                                <Text style={styles.textStyle}>Create</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => setModalVisible(!modalVisible)}>
+                                <Text style={styles.textStyle}>Cancel</Text>
+                            </Pressable>
+                        </View>
                     </View>
                 </View>
             </Modal>
@@ -75,7 +107,8 @@ const styles = StyleSheet.create({
     logoText: {
         fontSize: 40,
         fontWeight: 'bold',
-        color: 'white',
+        color: 'black',
+        marginRight: 10,
     }, 
     centeredView: {
         flex: 1,
@@ -108,6 +141,7 @@ const styles = StyleSheet.create({
     },
     buttonClose: {
         backgroundColor: '#247BA0',
+        marginHorizontal: 5,
     },
     textStyle: {
         color: 'white',
@@ -115,8 +149,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     modalText: {
+        fontSize: 20,
+        fontWeight: 'bold',
         marginBottom: 15,
         textAlign: 'center',
+    },
+    inputTitles: {
+        fontSize: 15,
+        textAlign: 'left',
     },
     deckBox: {
         borderWidth: 5,
@@ -124,5 +164,14 @@ const styles = StyleSheet.create({
         padding: 50,
         marginVertical: 8,
         marginHorizontal: 16,
+    },
+    inputBox: {
+        borderWidth: 2,
+        width: 150,
+        height: 25,
+        alignItems: "center",
+        marginVertical: 8,
+        marginHorizontal: 8,
+        borderColor: 'black',
     }
 });
