@@ -231,6 +231,7 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 8,
         borderColor: 'black',
+        borderRadius: 10,
     },
     centeredDeckView: {
         height: '75%',

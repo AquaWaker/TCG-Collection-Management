@@ -1,18 +1,30 @@
 import 'react-native-gesture-handler';
-import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Pressable, Image} from 'react-native';
+import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Pressable, Image, TextInput} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Decks } from './Decks';
 import { SearchResultsPage } from './SearchResultsPage';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 const dummyData = require('./dummyData.json');
 
 function HomeScreen() {
+
+  const [searchQuery, onChangeSearchQuery] = React.useState('Search');
+
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text>HomeScreen</Text>
+      <View style={{width: '90%'}}>
+        <TextInput
+            style={styles.inputBox}
+            onChangeText={onChangeSearchQuery}
+            value={searchQuery}
+            placeholder="Search"
+        />
+        <View>
+          {/* Make some filters appear here */}
+        </View>
       </View>
     </SafeAreaView>
   )  
@@ -96,11 +108,14 @@ const styles = StyleSheet.create({
   deckGrid: {
     flex: 5,
   },
-  deckButtonSpace: {
-    flex: 1,
+  inputBox: {
+    borderWidth: 2,
+    width: '100%',
+    height: 50,
+    alignItems: "center",
+    marginVertical: 8,
+    paddingHorizontal: 10,
+    borderColor: 'black',
+    borderRadius: 10,
   },
-  deckButton: {
-    flex: 1,
-
-  }
 });

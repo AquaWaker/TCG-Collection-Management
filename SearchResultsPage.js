@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Pressable, Image} from 'react-native';
+import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Pressable, Image, TextInput} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
 export const SearchResultsPage = () => {
 
+    // const [searchQuery, onChangeSearchQuery] = React.useState('Search');
     const dummyData = require('./dummyData.json');
 
     return (
