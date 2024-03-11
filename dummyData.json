@@ -17,6 +17,51 @@
             "copies": 1,
             "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
             "price": "$30"
+        },
+        {
+            "name": "Test Card",
+            "setid": "TEST",
+            "id": 1,
+            "cost": 1,
+            "copies": 1,
+            "image": "none",
+            "price": "$30"
+        },
+        {
+            "name": "Test Card",
+            "setid": "TEST",
+            "id": 2,
+            "cost": 1,
+            "copies": 1,
+            "image": "none",
+            "price": "$30"
+        },
+        {
+            "name": "Test Card",
+            "setid": "TEST",
+            "id": 3,
+            "cost": 1,
+            "copies": 1,
+            "image": "none",
+            "price": "$30"
+        },
+        {
+            "name": "Test Card",
+            "setid": "TEST",
+            "id": 4,
+            "cost": 1,
+            "copies": 1,
+            "image": "none",
+            "price": "$30"
+        },
+        {
+            "name": "Test Card",
+            "setid": "TEST",
+            "id": 5,
+            "cost": 1,
+            "copies": 1,
+            "image": "none",
+            "price": "$30"
         }
     ],
     "Decks": [
