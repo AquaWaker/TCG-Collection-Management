@@ -19,7 +19,7 @@ export const SearchResultsPage = () => {
 
     const [searchQuery, onChangeSearchQuery] = React.useState('Search');
     const [viewLayout, setViewLayout] = React.useState('grid');
-    const [modalVisible, setModalVisible] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
     const [currentCard, setCurrentCard] = useState(require('./empty_card.json'));
     
     const navigation = useNavigation();
