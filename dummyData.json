@@ -4,6 +4,11 @@
             "name": "Command and Conquer",
             "setid": "ARC",
             "id": 159,
+            "description": "",
+            "details": [
+                "Defense reactions can't be played to Command and Conquer's chain link.",
+                "If Command and Conquer hits a hero, destroy all cards in their arsenal."
+            ],
             "cost": 2,
             "copies": 3,
             "image": "https://d2h5owxb2ypf43.cloudfront.net/cards/ARC159.webp",
@@ -13,10 +18,67 @@
             "name": "Sol Ring",
             "setid": "SLD",
             "id": 1494,
+            "description": "Forged within the star itself, the ring harnesses the stellar energy for an unfathomable purpose.",
+            "details": ["Add 2 Colorless Mana."],
             "cost": 1,
             "copies": 1,
             "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
             "price": "$30"
+        },
+        {
+            "name": "Test Card",
+            "setid": "TEST",
+            "id": 1,
+            "description": "This is a test card",
+            "details": [""],
+            "cost": 1,
+            "copies": 1,
+            "image": "",
+            "price": "$1"
+        },
+        {
+            "name": "Test Card",
+            "setid": "TEST",
+            "id": 2,
+            "description": "This is a test card",
+            "details": [""],
+            "cost": 1,
+            "copies": 1,
+            "image": "",
+            "price": "$1"
+        },
+        {
+            "name": "Test Card",
+            "setid": "TEST",
+            "id": 3,
+            "description": "This is a test card",
+            "details": [""],
+            "cost": 1,
+            "copies": 1,
+            "image": "",
+            "price": "$1"
+        },
+        {
+            "name": "Test Card",
+            "setid": "TEST",
+            "id": 4,
+            "description": "This is a test card",
+            "details": [""],
+            "cost": 1,
+            "copies": 1,
+            "image": "",
+            "price": "$1"
+        },
+        {
+            "name": "Test Card",
+            "setid": "TEST",
+            "id": 5,
+            "description": "This is a test card",
+            "details": [""],
+            "cost": 1,
+            "copies": 1,
+            "image": "",
+            "price": "$1"
         }
     ],
     "Decks": [
