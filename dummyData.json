@@ -26,26 +26,26 @@
             "price": "$30"
         },
         {
-            "name": "Test Card",
-            "setid": "TEST",
-            "id": 1,
-            "description": "This is a test card",
+            "name": "Pluto - Mickey's Clever Friend",
+            "setid": "RF",
+            "id": 154,
+            "description": "Pluto's job was to keep Gustav's attention so Minnie could get to the cave.",
             "details": [""],
             "cost": 1,
             "copies": 1,
-            "image": "",
+            "image": "https://images.lorcania.com/cards/iti/152_en_pluto-716.webp",
             "price": "$1"
         },
         {
-            "name": "Test Card",
-            "setid": "TEST",
-            "id": 2,
+            "name": "Dhelmise V",
+            "setid": "Sword & Shield",
+            "id": 187,
             "description": "This is a test card",
-            "details": [""],
+            "details": ["Anchor Anger", "Giga Hammer"],
             "cost": 1,
             "copies": 1,
-            "image": "",
-            "price": "$1"
+            "image": "https://assets.pokemon.com/assets/cms2/img/cards/web/SWSH1/SWSH1_EN_187.png",
+            "price": "$10"
         },
         {
             "name": "Test Card",
