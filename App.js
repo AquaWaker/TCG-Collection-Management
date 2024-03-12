@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Pressable, Image, TextInput} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation, NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Decks } from './Decks';
@@ -9,9 +9,15 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 
 const dummyData = require('./dummyData.json');
 
+
 function HomeScreen() {
 
   const [searchQuery, onChangeSearchQuery] = React.useState('Search');
+  const navigation = useNavigation();
+
+  const onSubmitSearch = () => {
+    navigation.navigate('SearchResults');
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -19,6 +25,7 @@ function HomeScreen() {
         <TextInput
             style={styles.inputBox}
             onChangeText={onChangeSearchQuery}
+            onSubmitEditing={onSubmitSearch}
             value={searchQuery}
             placeholder="Search"
         />
