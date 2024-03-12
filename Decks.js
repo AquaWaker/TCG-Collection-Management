@@ -1,21 +1,22 @@
 import React, {useState} from 'react';
 import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Image, TextInput} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome  } from '@expo/vector-icons';
 
 
 export const Decks = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [isSelected, setSelection] = useState(false);
+    const [editEnabled, setEditEnabled] = useState(false);
     const [DeckName, onChangeDeckName] = React.useState('New Deck');
     const [GameName, onChangeGameName] = React.useState('Game Name');
+    const [editName, onChangeEditName] = React.useState('');
+    const [editDes, onChangeEditDes] = React.useState('');
     const dummyData = require('./dummyData.json');
     const [deckModalVisible, setDeckModalVisible] = useState(false);
     const [currentDeck, setCurrentDeck] = useState(require('./empty.json'));
 
     function addNewDeck () {
-        dummyData.Decks.push({ "name": DeckName, "game": GameName, "cards": []});
+        dummyData.Decks.push({ "name": DeckName, "game": GameName, "description": "", "cards": []});
         onChangeDeckName("New Deck");
         onChangeGameName("Game");
         setModalVisible(!modalVisible);
@@ -24,6 +25,14 @@ export const Decks = () => {
     function deckPopupSetup (deck) {
         setCurrentDeck(deck);
         setDeckModalVisible(true);
+    }
+
+    function activateEdit () {
+        setEditEnabled(true);
+    }
+
+    function saveChanges () {
+        setEditEnabled(false);
     }
 
     return (
@@ -84,13 +93,36 @@ export const Decks = () => {
                         <Pressable onPress={() => setDeckModalVisible(!deckModalVisible)}>
                             <AntDesign name="arrowleft" size={24} color="white" />
                         </Pressable>
+                        <View style={{marginHorizontal: 160}}/>
+                        {editEnabled
+                            ? 
+                            <Pressable onPress={() => saveChanges()}>
+                                <FontAwesome name="save" size={24} color="white" />
+                            </Pressable>
+                            :
+                            <Pressable onPress={() => activateEdit()}>
+                                <FontAwesome name="gear" size={24} color="white" />
+                            </Pressable>
+                        }
+
                     </View>
                     <View style={{flexDirection: 'row', width: '90%'}}>
                         <Text style={styles.logoDeckText}>LOGO</Text>
                         <View>
-                            <Text style={styles.deckNamePopup}>{currentDeck.name}</Text>
+                            <TextInput 
+                                style={styles.deckNamePopup}
+                                onChangeText={onChangeEditName}
+                                value={currentDeck.name}
+                                editable={editEnabled}
+                            />
                             <View style={{width: '80%'}}>
-                                <Text style={styles.deckDesPopup}>{currentDeck.description}</Text>
+                                <TextInput 
+                                    style={styles.deckDesPopup}
+                                    multiline
+                                    onChangeText={onChangeEditDes}
+                                    value={currentDeck.description}
+                                    editable={editEnabled}
+                                />
                             </View>
                         </View>
                     </View>
@@ -103,7 +135,7 @@ export const Decks = () => {
                         <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
                     </View>
 
-                    <View style={{width: '90%', height: '75%'}}>
+                    <View style={{width: '90%', height: '65%'}}>
                         <FlatList
                             data = {currentDeck.cards}
                             renderItem={({ item }) =>
@@ -113,6 +145,12 @@ export const Decks = () => {
                             }
                         />
                     </View>
+
+                    <Pressable>
+                        <View style={[styles.button, styles.deckButton]}>
+                            <Text style={styles.buttonText}>+ Add New Card</Text>
+                        </View>
+                    </Pressable>
                 </View>
             </Modal>
 
@@ -242,6 +280,7 @@ const styles = StyleSheet.create({
         marginTop: 90,
     },
     backButton: {
+        flexDirection: 'row',
         justifyContent: 'flex-end',
         marginVertical: 10,
     },

@@ -5,7 +5,6 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Decks } from './Decks';
 import { SearchResultsPage } from './SearchResultsPage';
-import { SimpleLineIcons } from '@expo/vector-icons';
 
 const dummyData = require('./dummyData.json');
 
