@@ -14,6 +14,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Entypo, Ionicons, AntDesign } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
 
 export const SearchResultsPage = () => {
 
