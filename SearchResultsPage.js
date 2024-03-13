@@ -145,14 +145,15 @@ export const SearchResultsPage = () => {
     };
 
     return (
+        <ImageBackground source={require('./assets/background2.png')} style={styles.backgroundImage}>
         <SafeAreaView style={styles.container}>
             <CardModal/>
             <View style={styles.layoutOptions}>
                 <TouchableOpacity onPress={() => setViewLayout('grid')}>
-                    <Entypo name="grid" size={24} color={viewLayout=='grid' ? '#247BA0' : 'black'} />
+                    <Entypo name="grid" size={40} color={viewLayout=='grid' ? '#247BA0' : 'black'} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setViewLayout('row')}>
-                    <Ionicons name="reorder-three" size={24} color={viewLayout=='row' ? '#247BA0' : 'black'} />
+                    <Ionicons name="reorder-three" size={40} color={viewLayout=='row' ? '#247BA0' : 'black'} />
                 </TouchableOpacity>
             </View>
             <View style={styles.resultList}>
@@ -190,6 +191,7 @@ export const SearchResultsPage = () => {
                 </View>
             </View>
         </SafeAreaView>
+        </ImageBackground>
     );
 
 };
@@ -199,7 +201,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: "#00000000",
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -292,7 +294,7 @@ const styles = StyleSheet.create({
     modalView: {
         width: '100%',
         height: '75%',
-        backgroundColor: '#586F7C',
+        backgroundColor: '#BBA5B0',
         padding: 10,
         marginTop: 90,
     },
@@ -345,5 +347,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: 'black',
         borderRadius: 10,
+    },
+
+    backgroundImage: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
     },
 });

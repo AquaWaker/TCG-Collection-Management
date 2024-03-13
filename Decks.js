@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Image, TextInput} from 'react-native';
+import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Image, TextInput, ImageBackground} from 'react-native';
 import { AntDesign, FontAwesome  } from '@expo/vector-icons';
 
 
@@ -14,6 +14,10 @@ export const Decks = () => {
     const dummyData = require('./dummyData.json');
     const [deckModalVisible, setDeckModalVisible] = useState(false);
     const [currentDeck, setCurrentDeck] = useState(require('./empty.json'));
+
+    const onAddPress = () => {
+        Alert.alert("New Card Was Added", "your new card was added successfully!", [{ text: "OK", onPress: () => console.log("OK Pressed") }], { cancelable: true });
+      };
 
     function addNewDeck () {
         dummyData.Decks.push({ "name": DeckName, "game": GameName, "description": "", "cards": []});
@@ -36,6 +40,7 @@ export const Decks = () => {
     }
 
     return (
+        <ImageBackground source={require('./assets/background.png')} style={styles.backgroundImage}>
         <SafeAreaView style={styles.container}>
             <Modal
                 animationType="slide"
@@ -64,17 +69,21 @@ export const Decks = () => {
                                 placeholder="Game"
                             />
                         </View>
+                        
                         <View style={{flexDirection: 'row'}}>
+                       
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => addNewDeck()}>
                                 <Text style={styles.textStyle}>Create</Text>
                             </Pressable>
+                    
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => setModalVisible(!modalVisible)}>
                                 <Text style={styles.textStyle}>Cancel</Text>
                             </Pressable>
+                       
                         </View>
                     </View>
                 </View>
@@ -146,7 +155,7 @@ export const Decks = () => {
                         />
                     </View>
 
-                    <Pressable>
+                    <Pressable onPress={onAddPress}>
                         <View style={[styles.button, styles.deckButton]}>
                             <Text style={styles.buttonText}>+ Add New Card</Text>
                         </View>
@@ -159,12 +168,14 @@ export const Decks = () => {
                     data = {dummyData.Decks}
                     renderItem={({ item }) =>
                     <Pressable onPress={() => deckPopupSetup(item)}>
+                    <View style={styles.opaqueBox}>
                         <View style={styles.deckBox}>
                             <Text style={styles.logoText}>LOGO</Text>
                             <View>
                                 <Text>{item.name}</Text>
                                 <Text>{item.game}</Text>
                             </View>
+                        </View>
                         </View>
                     </Pressable>
                     }
@@ -178,6 +189,7 @@ export const Decks = () => {
                 </Pressable>
             </View>
         </SafeAreaView>
+        </ImageBackground>
     );
 
 };
@@ -185,12 +197,13 @@ export const Decks = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: "#00000000",
         alignItems: 'center',
         justifyContent: 'center',
     },
     deckGrid: {
         flex: 12,
+        padding: 10,
     },
     deckButtonSpace: {
         flex: 1,
@@ -214,7 +227,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         margin: 20,
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
         borderRadius: 20,
         padding: 35,
         alignItems: 'center',
@@ -233,10 +246,10 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     deckButton: {
-        backgroundColor: '#247BA0',
+        backgroundColor: '#350023',
     },
     buttonClose: {
-        backgroundColor: '#247BA0',
+        backgroundColor: '#350023',
         marginHorizontal: 5,
     },
     textStyle: {
@@ -274,7 +287,7 @@ const styles = StyleSheet.create({
     centeredDeckView: {
         height: '75%',
         width: '100%',
-        backgroundColor: '#586F7C',
+        backgroundColor: '#BBA5B0',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 90,
@@ -310,5 +323,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         justifyContent: 'flex-start', 
         width: '90%',
-    }
+    },
+    backgroundImage: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+    },
+    opaqueBox: {
+        backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+        padding: 10,
+        borderRadius: 10,
+        marginVertical: 10,
+    },
 });
