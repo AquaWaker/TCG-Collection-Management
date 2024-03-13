@@ -43,7 +43,7 @@ function HomeScreen() {
   const navigation = useNavigation();
 
   const onSubmitSearch = () => {
-    navigation.navigate("SearchResults");
+    navigation.navigate("SEARCH RESULTS");
   };
 
   const onFilterPress = () => {

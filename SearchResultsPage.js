@@ -30,7 +30,7 @@ export const SearchResultsPage = () => {
     const placeholderImage = require('./assets/wireframe.png');
 
     const onSubmitSearch = () => {
-        navigation.navigate('SearchResults');
+        navigation.navigate("SEARCH RESULTS");
     }
 
     const popupModal = (card) => {
@@ -349,8 +349,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: 'black',
         borderRadius: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)', 
     },
-
     backgroundImage: {
         flex: 1,
         width: '100%',
