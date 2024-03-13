@@ -40,7 +40,6 @@ export const Decks = () => {
     }
 
     return (
-        <ImageBackground source={require('./assets/background.png')} style={styles.backgroundImage}>
         <SafeAreaView style={styles.container}>
             <Modal
                 animationType="slide"
@@ -189,7 +188,6 @@ export const Decks = () => {
                 </Pressable>
             </View>
         </SafeAreaView>
-        </ImageBackground>
     );
 
 };
@@ -197,7 +195,7 @@ export const Decks = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#00000000",
+        backgroundColor: "#ffffff",
         alignItems: 'center',
         justifyContent: 'center',
     },

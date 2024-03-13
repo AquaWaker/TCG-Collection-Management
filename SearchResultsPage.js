@@ -147,7 +147,6 @@ export const SearchResultsPage = () => {
     };
 
     return (
-        <ImageBackground source={require('./assets/background2.png')} style={styles.backgroundImage}>
         <SafeAreaView style={styles.container}>
             <CardModal/>
             <View style={styles.layoutOptions}>
@@ -193,7 +192,6 @@ export const SearchResultsPage = () => {
                 </View>
             </View>
         </SafeAreaView>
-        </ImageBackground>
     );
 
 };

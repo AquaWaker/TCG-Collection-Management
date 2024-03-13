@@ -15,7 +15,7 @@ const dummyData = require("./dummyData.json");
 function CustomTitle() {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <Image source={shuffleIcon} style={{ width: 50, height: 50, marginLeft: 5 }} />
+      {/* <Image source={shuffleIcon} style={{ width: 50, height: 50, marginLeft: 5 }} /> */}
       <Text style={{ fontWeight: "bold", fontSize: 28, color:"white", marginRight: 50 }}>SHUFFLED</Text>
     </View>
   );
@@ -23,7 +23,7 @@ function CustomTitle() {
 function SearchTitle() {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <Image source={shuffleIcon} style={{ width: 50, height: 50, marginLeft: 5 }} />
+      {/* <Image source={shuffleIcon} style={{ width: 50, height: 50, marginLeft: 5 }} /> */}
       <Text style={{ fontWeight: "bold", fontSize: 28, color:"white", marginRight: 50 }}>SEARCH RESULTS</Text>
     </View>
   );
@@ -31,7 +31,7 @@ function SearchTitle() {
 function DeckTitle() {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <Image source={shuffleIcon} style={{ width: 50, height: 50, marginLeft: 5 }} />
+      {/* <Image source={shuffleIcon} style={{ width: 50, height: 50, marginLeft: 5 }} /> */}
       <Text style={{ fontWeight: "bold", fontSize: 28, color:"white", marginRight: 50}}>YOUR DECKS</Text>
     </View>
   );
@@ -59,7 +59,7 @@ function HomeScreen() {
     Alert.alert("Advanced Filters", "This is where advanced filter options can be configured", [{ text: "OK", onPress: () => console.log("OK Pressed") }], { cancelable: true });
   };
 
-  const filters = ["Liked ", "Game ", "In Deck ", "! Deck ", "Recents ", "New Arrivals ", "Promo "];
+  const filters = ["Liked ", "Game ", "In Deck ", "Not in Deck ", "Recents ", "New Arrivals ", "Promo "];
 
   const [selectedFilters, setSelectedFilters] = useState(new Array(filters.length).fill(false));
 
@@ -70,7 +70,6 @@ function HomeScreen() {
   };
 
   return (
-    <ImageBackground source={require('./assets/background.png')} style={styles.backgroundImage}>
     <SafeAreaView style={styles.container}>
       <View style={{ width: "90%" }}>
       <View style={styles.opaqueBox}>
@@ -126,7 +125,6 @@ function HomeScreen() {
         </Modal>
       </View>
     </SafeAreaView>
-    </ImageBackground>
   );
 }
 
@@ -204,7 +202,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#00000000",
+    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -359,7 +357,6 @@ const styles = StyleSheet.create({
       height: '100%',
     },
     opaqueBox: {
-      backgroundColor: 'rgba(255, 255, 255, 0.9)', 
       padding: 10,
       borderRadius: 10,
     },
