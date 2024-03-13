@@ -74,7 +74,7 @@ function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <View style={{ width: "90%" }}>
       <View style={styles.opaqueBox}>
-        <Text style={styles.loremText}>Search for your collection</Text>
+        <Text style={styles.loremText}>Search Your Collection</Text>
         <TextInput style={styles.inputBox} onChangeText={onChangeSearchQuery} onSubmitEditing={onSubmitSearch} value={searchQuery} placeholder="Search" />
         <View style={styles.filterButtonOuterContainer}>
           <View style={styles.filterButtonContainer}>
