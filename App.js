@@ -58,7 +58,7 @@ export default function App() {
           name="Home" 
           component={HomeScreen}
           options= {{
-            title: 'Search Your Collection',
+            title: 'SHUFFLED',
             headerStyle: {
               backgroundColor: '#45062E',
             },
