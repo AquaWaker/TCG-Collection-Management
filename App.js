@@ -1,16 +1,16 @@
 import "react-native-gesture-handler";
 import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Pressable, Image, TextInput } from "react-native";
 import { useNavigation, NavigationContainer } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect, useState} from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Decks } from "./Decks";
 import { SearchResultsPage } from "./SearchResultsPage";
-import { useState } from "react";
 import { Checkbox } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import shuffleIcon from "./assets/logo.png";
 
 const dummyData = require("./dummyData.json");
+import { initializeDatabase } from './database';
 
 function CustomTitle() {
   return (
@@ -139,6 +139,17 @@ function DecksPage() {
 const Drawer = createDrawerNavigator();
 
 export default function App() {
+  useEffect(() => {
+    initializeDatabase()
+      .then(() => {
+        console.log('Database initialized');
+      })
+      .catch(error => {
+        console.error('Error initializing database:', error);
+      });
+  }, []);
+
+
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home" screenOptions={{
