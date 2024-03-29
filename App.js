@@ -9,8 +9,12 @@ import { Checkbox } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import shuffleIcon from "./assets/logo.png";
 
-const dummyData = require("./dummyData.json");
-import { initializeDatabase } from './database';
+import {
+  initializeDatabase,
+  insertCard,
+  getAllCards,
+  deleteAllCards,
+} from './database';
 
 function CustomTitle() {
   return (
@@ -137,18 +141,32 @@ function DecksPage() {
 }
 
 const Drawer = createDrawerNavigator();
+const dummyData = require("./dummyData.json");
 
 export default function App() {
+  const [cards, setCards] = useState([]);
+
+  const fetchCards = () => {
+    getAllCards()
+      .then(result => {
+        setCards(result.rows._array);
+      })
+      .catch(error => {
+        console.error('Error fetching items:', error);
+      });
+  }
+
   useEffect(() => {
     initializeDatabase()
       .then(() => {
-        console.log('Database initialized');
-      })
-      .catch(error => {
-        console.error('Error initializing database:', error);
+        // Load in dummy data
+        dummyData.Cards.forEach(card => {
+          insertCard(card);
+        });
+
+        fetchCards(); //put into cards state variable
       });
   }, []);
-
 
   return (
     <NavigationContainer>
