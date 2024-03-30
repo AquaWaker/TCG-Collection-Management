@@ -165,18 +165,19 @@ export default function App() {
         });
 
         fetchCards(); //put into cards state variable
+        // deleteAllCards();
       });
   }, []);
 
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home" screenOptions={{
-    drawerStyle: {
-      backgroundColor: "rgba(53, 0, 35, 0.9)", 
-    },
-    drawerActiveTintColor: "white",
-    drawerInactiveTintColor: "#999", 
-  }}>
+        drawerStyle: {
+          backgroundColor: "rgba(53, 0, 35, 0.9)", 
+        },
+        drawerActiveTintColor: "white",
+        drawerInactiveTintColor: "#999", 
+      }}>
         <Drawer.Screen
           name="HOME"
           component={HomeScreen}
