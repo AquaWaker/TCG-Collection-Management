@@ -17,7 +17,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
 
-export const SearchResultsPage = () => {
+export const SearchResultsPage = ({ route }) => {
 
     const [searchQuery, onChangeSearchQuery] = React.useState('Search');
     const [viewLayout, setViewLayout] = React.useState('grid');
@@ -25,9 +25,13 @@ export const SearchResultsPage = () => {
     const [currentCard, setCurrentCard] = useState(require('./empty_card.json'));
     
     const navigation = useNavigation();
-    
-    const dummyData = require('./dummyData.json');
+ 
     const placeholderImage = require('./assets/wireframe.png');
+    const { cards: cardData } = route.params;
+    const cards = cardData.map(card => ({
+        ...card,
+        details: JSON.parse(card.details)
+    }));
 
     const onSubmitSearch = () => {
         navigation.navigate("SEARCH RESULTS");
@@ -148,49 +152,60 @@ export const SearchResultsPage = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <CardModal/>
-            <View style={styles.layoutOptions}>
-                <TouchableOpacity onPress={() => setViewLayout('grid')}>
-                    <Entypo name="grid" size={40} color={viewLayout=='grid' ? '#247BA0' : 'black'} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setViewLayout('row')}>
-                    <Ionicons name="reorder-three" size={40} color={viewLayout=='row' ? '#247BA0' : 'black'} />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.resultList}>
-                { viewLayout == 'row'
-                    ? <FlatList
-                        key={'rowList'}
-                        data={dummyData.Cards}
-                        renderItem={({ item }) => 
-                            <ResultRow card={item}/>
-                        }
-                    />
-                    : <FlatList
-                        key={'gridList'}
-                        data = {dummyData.Cards}
-                        numColumns={2}
-                        renderItem={({ item }) => 
-                            <View style={styles.resultGrid}>
-                                <ResultGrid card={item}/>
+            { cards.length == 0 
+                ?   <Text style={{
+                        fontSize: 30,
+                        fontWeight: '500',
+                        color: 'gray',
+                        textAlign: 'center',
+                    }}>
+                        No Cards Stored
+                    </Text>
+                :   <View style={styles.container}>
+                        <CardModal/>
+                        <View style={styles.layoutOptions}>
+                            <TouchableOpacity onPress={() => setViewLayout('grid')}>
+                                <Entypo name="grid" size={40} color={viewLayout=='grid' ? '#247BA0' : 'black'} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setViewLayout('row')}>
+                                <Ionicons name="reorder-three" size={40} color={viewLayout=='row' ? '#247BA0' : 'black'} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.resultList}>
+                            { viewLayout == 'row'
+                                ? <FlatList
+                                    key={'rowList'}
+                                    data={cards}
+                                    renderItem={({ item }) => 
+                                        <ResultRow card={item}/>
+                                    }
+                                />
+                                : <FlatList
+                                    key={'gridList'}
+                                    data = {cards}
+                                    numColumns={2}
+                                    renderItem={({ item }) => 
+                                        <View style={styles.resultGrid}>
+                                            <ResultGrid card={item}/>
+                                        </View>
+                                    }
+                                />
+                            }
+                        </View>
+                        <View style={styles.inputBoxContainer}>
+                            <TextInput
+                                style={styles.inputBox}
+                                onChangeText={onChangeSearchQuery}
+                                onSubmitEditing={onSubmitSearch}
+                                value={searchQuery}
+                                placeholder="Search"
+                            />
+                            <View>
+                            {/* Insert search filters here */}
                             </View>
-                        }
-                    />
-                }
-            </View>
-
-            <View style={styles.inputBoxContainer}>
-                <TextInput
-                    style={styles.inputBox}
-                    onChangeText={onChangeSearchQuery}
-                    onSubmitEditing={onSubmitSearch}
-                    value={searchQuery}
-                    placeholder="Search"
-                />
-                <View>
-                {/* Insert search filters here */}
-                </View>
-            </View>
+                        </View>
+                    </View>
+            }
         </SafeAreaView>
     );
 

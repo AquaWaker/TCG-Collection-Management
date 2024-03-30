@@ -46,39 +46,6 @@
             "copies": 1,
             "image": "https://assets.pokemon.com/assets/cms2/img/cards/web/SWSH1/SWSH1_EN_187.png",
             "price": "$10"
-        },
-        {
-            "name": "Test Card",
-            "setid": "TEST",
-            "id": 3,
-            "description": "This is a test card",
-            "details": [""],
-            "cost": 1,
-            "copies": 1,
-            "image": "",
-            "price": "$1"
-        },
-        {
-            "name": "Test Card",
-            "setid": "TEST",
-            "id": 4,
-            "description": "This is a test card",
-            "details": [""],
-            "cost": 1,
-            "copies": 1,
-            "image": "",
-            "price": "$1"
-        },
-        {
-            "name": "Test Card",
-            "setid": "TEST",
-            "id": 5,
-            "description": "This is a test card",
-            "details": [""],
-            "cost": 1,
-            "copies": 1,
-            "image": "",
-            "price": "$1"
         }
     ],
     "Decks": [

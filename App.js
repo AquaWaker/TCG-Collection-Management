@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, ImageBackground, Pressable, Image, TextInput } from "react-native";
+import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, ActivityIndicator, ImageBackground, Pressable, Image, TextInput } from "react-native";
 import { useNavigation, NavigationContainer } from "@react-navigation/native";
 import React, { useEffect, useState} from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -132,8 +132,8 @@ function HomeScreen() {
   );
 }
 
-function SearchResults() {
-  return <SearchResultsPage></SearchResultsPage>;
+function SearchResults({ route }) {
+  return <SearchResultsPage route={route}/>;
 }
 
 function DecksPage() {
@@ -145,92 +145,117 @@ const dummyData = require("./dummyData.json");
 
 export default function App() {
   const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchCards = () => {
-    getAllCards()
-      .then(result => {
-        setCards(result.rows._array);
-      })
-      .catch(error => {
-        console.error('Error fetching items:', error);
-      });
+    return new Promise((resolve, reject) => {
+      getAllCards()
+        .then(result => {
+          setCards(result.rows._array);
+          resolve();
+        })
+        .catch(error => {
+          console.error('Error fetching items:', error);
+          reject(error);
+        });
+    });
   }
 
   useEffect(() => {
     initializeDatabase()
       .then(() => {
+        // Uncomment this to wipe all existing cards in db
+        // deleteAllCards();
+
         // Load in dummy data
         dummyData.Cards.forEach(card => {
           insertCard(card);
         });
 
-        fetchCards(); //put into cards state variable
-        // deleteAllCards();
+        fetchCards()
+          .then(() => {
+            setIsLoading(false);
+          });
       });
   }, []);
 
-  return (
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home" screenOptions={{
-        drawerStyle: {
-          backgroundColor: "rgba(53, 0, 35, 0.9)", 
-        },
-        drawerActiveTintColor: "white",
-        drawerInactiveTintColor: "#999", 
-      }}>
-        <Drawer.Screen
-          name="HOME"
-          component={HomeScreen}
-          options={{
-            headerTitle: (props) => <CustomTitle {...props} />,
-            headerStyle: {
-              backgroundColor: "#45062E",
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-              fontWeight: "bold",
-              textAlign: "center",
-              fontSize: 28,
-            },
-          }}
-        />
-        <Drawer.Screen
-          name="SEARCH RESULTS"
-          component={SearchResults}
-          options={{
-            headerTitle: (props) => <SearchTitle {...props} />,
-            headerStyle: {
-              backgroundColor: "#45062E",
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-              fontWeight: "bold",
-              textAlign: "center",
-            },
-          }}
-        />
-        <Drawer.Screen
-          name="DECKS"
-          component={DecksPage}
-          options={{
-            headerTitle: (props) => <DeckTitle {...props} />,
-            headerStyle: {
-              backgroundColor: "#45062E",
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-              fontWeight: "bold",
-              textAlign: "center",
-            },
-          }}
-        />
-      </Drawer.Navigator>
-    </NavigationContainer>
-  );
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.loadingScreenView}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <NavigationContainer>
+        <Drawer.Navigator initialRouteName="Home" screenOptions={{
+          drawerStyle: {
+            backgroundColor: "rgba(53, 0, 35, 0.9)", 
+          },
+          drawerActiveTintColor: "white",
+          drawerInactiveTintColor: "#999", 
+        }}>
+          <Drawer.Screen
+            name="HOME"
+            component={HomeScreen}
+            options={{
+              headerTitle: (props) => <CustomTitle {...props} />,
+              headerStyle: {
+                backgroundColor: "#45062E",
+              },
+              headerTintColor: "#fff",
+              headerTitleStyle: {
+                fontWeight: "bold",
+                textAlign: "center",
+                fontSize: 28,
+              },
+            }}
+          />
+          <Drawer.Screen
+            name="SEARCH RESULTS"
+            component={SearchResults}
+            initialParams={{cards: cards}}
+            options={{
+              headerTitle: (props) => <SearchTitle {...props} />,
+              headerStyle: {
+                backgroundColor: "#45062E",
+              },
+              headerTintColor: "#fff",
+              headerTitleStyle: {
+                fontWeight: "bold",
+                textAlign: "center",
+              },
+            }}
+          />
+          <Drawer.Screen
+            name="DECKS"
+            component={DecksPage}
+            options={{
+              headerTitle: (props) => <DeckTitle {...props} />,
+              headerStyle: {
+                backgroundColor: "#45062E",
+              },
+              headerTintColor: "#fff",
+              headerTitleStyle: {
+                fontWeight: "bold",
+                textAlign: "center",
+              },
+            }}
+          />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingScreenView: {
     flex: 1,
     backgroundColor: "#ffffff",
     alignItems: "center",
