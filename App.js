@@ -4,10 +4,10 @@ import { useNavigation, NavigationContainer } from "@react-navigation/native";
 import React, { useEffect, useState} from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Decks } from "./Decks";
+import { FiltersPage } from "./FiltersPage";
 import { SearchResultsPage } from "./SearchResultsPage";
 import { Checkbox } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import shuffleIcon from "./assets/logo.png";
 
 import {
   initializeDatabase,
@@ -19,7 +19,6 @@ import {
 function CustomTitle() {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
-      {/* <Image source={shuffleIcon} style={{ width: 50, height: 50, marginLeft: 5 }} /> */}
       <Text style={{ fontWeight: "bold", fontSize: 28, color:"white", marginRight: 50 }}>SHUFFLED</Text>
     </View>
   );
@@ -27,7 +26,6 @@ function CustomTitle() {
 function SearchTitle() {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
-      {/* <Image source={shuffleIcon} style={{ width: 50, height: 50, marginLeft: 5 }} /> */}
       <Text style={{ fontWeight: "bold", fontSize: 28, color:"white", marginRight: 50 }}>SEARCH RESULTS</Text>
     </View>
   );
@@ -35,7 +33,6 @@ function SearchTitle() {
 function DeckTitle() {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
-      {/* <Image source={shuffleIcon} style={{ width: 50, height: 50, marginLeft: 5 }} /> */}
       <Text style={{ fontWeight: "bold", fontSize: 28, color:"white", marginRight: 50}}>YOUR DECKS</Text>
     </View>
   );
@@ -132,12 +129,16 @@ function HomeScreen() {
   );
 }
 
+function AdvancedSearch() {
+  return <FiltersPage/>
+}
+
 function SearchResults({ route }) {
   return <SearchResultsPage route={route}/>;
 }
 
 function DecksPage() {
-  return <Decks></Decks>;
+  return <Decks/>;
 }
 
 const Drawer = createDrawerNavigator();
@@ -208,6 +209,20 @@ export default function App() {
                 fontWeight: "bold",
                 textAlign: "center",
                 fontSize: 28,
+              },
+            }}
+          />
+          <Drawer.Screen
+            name="ADVANCED SEARCH"
+            component={AdvancedSearch}
+            options={{
+              headerStyle: {
+                backgroundColor: "#45062E",
+              },
+              headerTintColor: "#fff",
+              headerTitleStyle: {
+                fontWeight: "bold",
+                textAlign: "center",
               },
             }}
           />

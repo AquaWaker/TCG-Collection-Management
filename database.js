@@ -89,6 +89,31 @@ export const getAllCards = () => {
     });
 };
 
+export const searchCards = (name, filters) => {
+    var databaseSearch = 'SELECT * FROM cards';
+
+    if (name != "") {
+        databaseSearch += 'WHERE name = ' + name;
+    }
+
+    return new Promise((resolve, reject) => {
+        db.transaction(tx => {
+            tx.executeSql(
+                databaseSearch,
+                [],
+                (_, result) => {
+                    // console.log('Cards fetched successfully');
+                    resolve(result);
+                },
+                (_, error) => {
+                    console.error('Error fetching cards:', error);
+                    reject(error);
+                }
+            );
+        });
+    });
+}
+
 export const deleteAllCards = () => {
     return new Promise((resolve, reject) => {
         db.transaction(tx => {
