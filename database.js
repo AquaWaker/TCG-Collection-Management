@@ -90,10 +90,36 @@ export const getAllCards = () => {
 };
 
 export const searchCards = (name, filters) => {
-    var databaseSearch = 'SELECT * FROM cards';
+    var databaseSearch = 'SELECT * FROM cards ';
+    var addAnd = 0;
 
     if (name != "") {
         databaseSearch += 'WHERE name = ' + name;
+        addAnd = 1;
+    }
+
+    // if (filters.game != null) {
+    //     if (addAnd == 1) {
+    //         databaseSearch += ' AND '
+    //     }
+    //     databaseSearch += 'WHERE game = ' + filters.game;
+    //     addAnd = 1;
+    // }
+
+    if (filters.id != null) {
+        if (addAnd == 1) {
+            databaseSearch += ' AND '
+        }
+        databaseSearch += 'WHERE setid = ' + filters.id;
+        addAnd = 1;
+    }
+
+    if (filters.price != -1) {
+        if (addAnd == 1) {
+            databaseSearch += ' AND '
+        }
+        databaseSearch += 'WHERE price ' + filters.operation + ' ' + filters.price ;
+        addAnd = 1;
     }
 
     return new Promise((resolve, reject) => {
