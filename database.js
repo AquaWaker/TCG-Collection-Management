@@ -97,7 +97,7 @@ export const searchCards = (filters) => {
     console.log(filters);
 
     if (filters.name != "") {
-        databaseSearch += 'WHERE name = ' + filters.name;
+        databaseSearch += 'WHERE name LIKE %' + filters.name + '%';
         addAnd = 1;
     }
 
