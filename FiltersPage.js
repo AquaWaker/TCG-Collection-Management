@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Image, TextInput, ImageBackground} from 'react-native';
+import { Modal, StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Image, TextInput, ImageBackground} from 'react-native';
 import { AntDesign, FontAwesome  } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 import { useNavigation } from "@react-navigation/native";
@@ -31,10 +31,10 @@ export const FiltersPage = () => {
     }
 
     const optionsGenre = [
-        { label: 'Magic the Gathering', value: 'mtg' },
+        { label: 'Magic the Gathering', value: 'magic the gathering' },
         { label: 'Pokemon', value: 'pokemon' },
         { label: 'Yugioh', value: 'yugioh' },
-        { label: 'Flesh and Blood', value: 'fab' },
+        { label: 'Flesh and Blood', value: 'flesh and blood' },
         { label: 'Lorcana', value: 'lorcana' },
         { label: 'Baseball', value: 'baseball' },
         { label: 'Basketball', value: 'basketball' },
@@ -45,7 +45,7 @@ export const FiltersPage = () => {
         {label: 'Greater', value: '>'},
         {label: 'Greater or Equal', value: '>='},
         {label: 'Lesser', value: '<'},
-        {label: 'Lesser or ', value: '>'},
+        {label: 'Lesser or Equal', value: '<='},
     ]
 
     function searchWithFilters () {

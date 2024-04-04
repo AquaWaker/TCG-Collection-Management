@@ -16,6 +16,7 @@ export const initializeDatabase = () => {
                     setid TEXT,
                     description TEXT,
                     details TEXT,
+                    game TEXT,
                     cost INTEGER,
                     copies INTEGER,
                     image TEXT,
@@ -94,17 +95,17 @@ export const searchCards = (filters) => {
     var addAnd = 0;
 
     if (filters.name != "") {
-        databaseSearch += 'WHERE name = ' + name;
+        databaseSearch += 'WHERE name = ' + filters.name;
         addAnd = 1;
     }
 
-    // if (filters.game != null) {
-    //     if (addAnd == 1) {
-    //         databaseSearch += ' AND '
-    //     }
-    //     databaseSearch += 'WHERE game = ' + filters.game;
-    //     addAnd = 1;
-    // }
+    if (filters.game != null) {
+        if (addAnd == 1) {
+            databaseSearch += ' AND '
+        }
+        databaseSearch += 'WHERE game = ' + filters.game;
+        addAnd = 1;
+    }
 
     if (filters.id != null) {
         if (addAnd == 1) {
