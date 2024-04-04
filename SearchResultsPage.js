@@ -52,8 +52,11 @@ export const SearchResultsPage = () => {
     }
 
     useEffect(() => {
-        fetchCards(filters);
-    })
+        fetchCards(filters)
+            .then(() => {
+                console.log("Filtered cards retrieved successfully.");
+            });
+    }, [])
 
     const onSubmitSearch = () => {
         changeFilters({
