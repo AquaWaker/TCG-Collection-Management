@@ -11,6 +11,8 @@ import {
     searchCards,
   } from './database';
 
+import { useFilters } from './FiltersContext';
+
 export const FiltersPage = () => {
 
     const [genreOption, setGenreOption] = React.useState(null);
@@ -18,6 +20,7 @@ export const FiltersPage = () => {
     const [setid, onChangeSetId] = React.useState('');
     const [price, onChangePrice] = React.useState('-1');
     const [priceOperation, setOperation] = React.useState("=");
+    const { changeFilters } = useFilters();
     const navigation = useNavigation();
 
     const placeholder = {

@@ -31,7 +31,7 @@ export const SearchResultsPage = () => {
  
     const placeholderImage = require('./assets/wireframe.png');
     const [cards, setCards] = useState([]);
-    const { filters } = useFilters();
+    const { filters, changeFilters } = useFilters();
 
     const fetchCards = (filters) => {
         return new Promise((resolve, reject) => {
