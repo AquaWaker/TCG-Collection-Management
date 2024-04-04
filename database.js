@@ -89,11 +89,11 @@ export const getAllCards = () => {
     });
 };
 
-export const searchCards = (name, filters) => {
+export const searchCards = (filters) => {
     var databaseSearch = 'SELECT * FROM cards ';
     var addAnd = 0;
 
-    if (name != "") {
+    if (filters.name != "") {
         databaseSearch += 'WHERE name = ' + name;
         addAnd = 1;
     }

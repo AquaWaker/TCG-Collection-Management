@@ -13,7 +13,6 @@ import {
   initializeDatabase,
   insertCard,
   getAllCards,
-  deleteAllCards,
 } from './database';
 
 function CustomTitle() {
@@ -39,12 +38,20 @@ function DeckTitle() {
 }
 
 function HomeScreen() {
-  const [searchQuery, onChangeSearchQuery] = React.useState("Search");
+  const [searchQuery, onChangeSearchQuery] = React.useState("");
   const [isFilterModalVisible, setFilterModalVisible] = useState(false);
   const navigation = useNavigation();
 
   const onSubmitSearch = () => {
-    navigation.navigate("SEARCH RESULTS");
+    var filters = {
+      name: searchQuery,
+      game: null,
+      id: null,
+      price: '-1',
+      operation: "=",
+    };
+
+    navigation.navigate("SEARCH RESULTS", filters);
   };
 
   const onFilterPress = () => {
@@ -75,7 +82,13 @@ function HomeScreen() {
       <View style={{ width: "90%" }}>
       <View style={styles.opaqueBox}>
         <Text style={styles.loremText}>Search Your Collection</Text>
-        <TextInput style={styles.inputBox} onChangeText={onChangeSearchQuery} onSubmitEditing={onSubmitSearch} value={searchQuery} placeholder="Search" />
+        <TextInput 
+          style={styles.inputBox} 
+          onChangeText={onChangeSearchQuery} 
+          onSubmitEditing={onSubmitSearch} 
+          value={searchQuery} 
+          placeholder="Search" 
+        />
         <View style={styles.filterButtonOuterContainer}>
           <View style={styles.filterButtonContainer}>
             <Pressable style={styles.filterButton} onPress={onFilterPress}>
@@ -162,6 +175,14 @@ export default function App() {
     });
   }
 
+  var emptyFilters = {
+    name: "",
+    game: null,
+    id: null,
+    price: '-1',
+    operation: "=",
+  };
+
   useEffect(() => {
     initializeDatabase()
       .then(() => {
@@ -229,7 +250,7 @@ export default function App() {
           <Drawer.Screen
             name="SEARCH RESULTS"
             component={SearchResults}
-            initialParams={{cards: cards}}
+            initialParams={emptyFilters}
             options={{
               headerTitle: (props) => <SearchTitle {...props} />,
               headerStyle: {

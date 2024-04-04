@@ -16,7 +16,7 @@ export const FiltersPage = () => {
     const [genreOption, setGenreOption] = React.useState(null);
     const [name, onChangeName] = React.useState('');
     const [setid, onChangeSetId] = React.useState('');
-    const [price, onChangePrice] = React.useState(-1);
+    const [price, onChangePrice] = React.useState('-1');
     const [priceOperation, setOperation] = React.useState("=");
     const navigation = useNavigation();
 
@@ -50,13 +50,14 @@ export const FiltersPage = () => {
 
     function searchWithFilters () {
         var filters = {
+            name: name,
             game: genreOption,
             id: setid,
             price: price,
             operation: priceOperation,
         };
 
-        navigation.navigate("SEARCH RESULTS");
+        navigation.navigate("SEARCH RESULTS", filters);
     }
 
     return (
@@ -81,12 +82,14 @@ export const FiltersPage = () => {
                 <Text style={styles.inputTitles}>Search by Price</Text>
                 <TextInput
                     style={styles.inputBox}
+                    keyboardType='numeric'
                     onChangeText={onChangePrice}
                     value={price}
                     placeholder="Price"
                 />
                 <View style={styles.dropdownBox}>
                     <RNPickerSelect
+                        style={{width: "100%", height: "100%"}}
                         placeholder={OpPlaceholder}
                         items={operations}
                         onValueChange={(value) => setOperation(value)}
@@ -97,6 +100,7 @@ export const FiltersPage = () => {
                 <Text>Sort by Game or Genre</Text>
                 <View style={styles.dropdownBox}>
                     <RNPickerSelect
+                        style={{width: "100%", height: "100%"}}
                         placeholder={placeholder}
                         items={optionsGenre}
                         onValueChange={(value) => setGenreOption(value)}
