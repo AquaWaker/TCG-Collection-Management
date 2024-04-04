@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Image, TextInput, ImageBackground} from 'react-native';
 import { AntDesign, FontAwesome  } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
-
+import { useNavigation } from "@react-navigation/native";
 
 import {
     initializeDatabase,
@@ -18,6 +18,7 @@ export const FiltersPage = () => {
     const [setid, onChangeSetId] = React.useState('');
     const [price, onChangePrice] = React.useState(-1);
     const [priceOperation, setOperation] = React.useState("=");
+    const navigation = useNavigation();
 
     const placeholder = {
         label: 'None selected...',
