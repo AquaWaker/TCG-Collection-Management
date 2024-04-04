@@ -1,196 +1,237 @@
-import React, {useState} from 'react';
-import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Image, TextInput, ImageBackground} from 'react-native';
-import { AntDesign, FontAwesome  } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { Alert, Modal, StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, TextInput } from 'react-native';
+import { AntDesign,MaterialIcons ,FontAwesome } from '@expo/vector-icons';
+import { getAllDecks, addNewDeckDB, addNewDeck} from './database';
+import { useNavigation } from '@react-navigation/native';
+import { getCardsForDeck } from './database';
 
 
 export const Decks = () => {
-
+    const [decks, setDecks] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [editEnabled, setEditEnabled] = useState(false);
-    const [DeckName, onChangeDeckName] = React.useState('New Deck');
-    const [GameName, onChangeGameName] = React.useState('Game Name');
-    const [editName, onChangeEditName] = React.useState('');
-    const [editDes, onChangeEditDes] = React.useState('');
-    const dummyData = require('./dummyData.json');
+    const [DeckName, onChangeDeckName] = useState('New Deck');
+    const [GameName, onChangeGameName] = useState('Game Name');
+    const [Description, onChangeDescription] = useState('');
+    const [editName, onChangeEditName] = useState('');
+    const [editDes, onChangeEditDes] = useState('');
     const [deckModalVisible, setDeckModalVisible] = useState(false);
-    const [currentDeck, setCurrentDeck] = useState(require('./empty.json'));
+    const [currentDeck, setCurrentDeck] = useState(null);
+    const refreshDecks = () => {
+        getAllDecks()
+            .then(decksFromDB => {
+                const uniqueDeckMap = new Map();
+                decksFromDB.forEach(deck => {
+                    const compositeKey = `${deck.name}-${JSON.stringify(deck.cards)}-${deck.game}-${deck.description}`;
+                    if (!uniqueDeckMap.has(compositeKey)) {
+                        uniqueDeckMap.set(compositeKey, deck);
+                    }
+                });
+                const uniqueDecks = Array.from(uniqueDeckMap.values());
+                setDecks(uniqueDecks);
+            })
+            .catch(error => {
+                console.error('Failed to load decks:', error);
+            });
+    };
+
+    useEffect(() => {
+        refreshDecks();
+    }, []);
 
     const onAddPress = () => {
         Alert.alert("New Card Was Added", "your new card was added successfully!", [{ text: "OK", onPress: () => console.log("OK Pressed") }], { cancelable: true });
-      };
+    };
 
-    function addNewDeck () {
-        dummyData.Decks.push({ "name": DeckName, "game": GameName, "description": "", "cards": []});
-        onChangeDeckName("New Deck");
-        onChangeGameName("Game");
-        setModalVisible(!modalVisible);
-    }
+    const addNewDeck = () => {
+        setModalVisible(true);
+    };
 
-    function deckPopupSetup (deck) {
+    const [deckCards, setDeckCards] = useState([]);
+    const deckCardPopupSetup = (deck) => {
         setCurrentDeck(deck);
+    setModalVisible(false);
+    setDeckModalVisible(true);
+    
+    // Fetch cards for the current deck
+    getCardsForDeck(deck.id)
+        .then(cards => {
+            // Log the fetched cards
+            console.log("Fetched cards for deck:", cards);
+            
+            // Update state with the fetched cards
+            setDeckCards(cards);
+        })
+        .catch(error => {
+            console.error('Failed to fetch cards for deck:', error);
+            // Handle the error appropriately
+        });
+    };
+
+    const deckPopupSetup = (deck) => {
+        setCurrentDeck(deck);
+        setModalVisible(false);
         setDeckModalVisible(true);
-    }
-
-    function activateEdit () {
-        setEditEnabled(true);
-    }
-
-    function saveChanges () {
-        setEditEnabled(false);
-    }
+        
+    };    
 
     return (
         <SafeAreaView style={styles.container}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                    setModalVisible(!modalVisible);
-                }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Create New Deck</Text>
-                        <View>
-                            <Text style={styles.inputTitles}>Deck Name</Text>
-                            <TextInput
-                                style={styles.inputBox}
-                                onChangeText={onChangeDeckName}
-                                value={DeckName}
-                                placeholder="New Deck"
-                            />
-                            <Text style={styles.inputTitles}>Game Name</Text>
-                            <TextInput
-                                style={styles.inputBox}
-                                onChangeText={onChangeGameName}
-                                value={GameName}
-                                placeholder="Game"
-                            />
-                        </View>
-                        
-                        <View style={{flexDirection: 'row'}}>
-                       
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => addNewDeck()}>
-                                <Text style={styles.textStyle}>Create</Text>
-                            </Pressable>
-                    
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModalVisible(!modalVisible)}>
-                                <Text style={styles.textStyle}>Cancel</Text>
-                            </Pressable>
-                       
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+            <View style={styles.deckGrid}>
+                <FlatList
+                    data={decks}
+                    renderItem={({ item }) => (
+                        <Pressable onPress={() => deckPopupSetup(item)}>
+                            <View style={styles.opaqueBox}>
+                                <View style={styles.deckBox}>
+                                    <Text style={styles.logoText}>LOGO</Text>
+                                    <View>
+                                        <Text>{item.name}</Text>
+                                        <Text>{item.game}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </Pressable>
+                    )}
+                    keyExtractor={item => item.id.toString()}
+                />
+                <Pressable
+                    style={[styles.button, styles.addButton]}
+                    onPress={addNewDeck}
+                >
+                    <Text style={styles.buttonText}>+ Add New Deck</Text>
+                </Pressable>
 
-            <Modal
+                <Modal
+    animationType="slide"
+    transparent={true}
+    visible={modalVisible}
+    onRequestClose={() => {
+        setModalVisible(false);
+    }}
+>
+    <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+            <TextInput
+                style={styles.input}
+                onChangeText={onChangeDeckName}
+                value={DeckName}
+                placeholder="Deck Name"
+            />
+            <TextInput
+                style={styles.input}
+                onChangeText={onChangeGameName}
+                value={GameName}
+                placeholder="Game Name"
+            />
+            <TextInput
+                style={styles.input}
+                onChangeText={onChangeDescription}
+                value={Description}
+                placeholder="Description"
+            />
+            <View style={styles.buttonContainer}>
+                <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => setModalVisible(false)}
+                >
+                    <Text style={styles.textStyle}>Close</Text>
+                </Pressable>
+                <Pressable
+                    style={[styles.button, styles.buttonOk]}
+                    onPress={() => {
+                        addNewDeckDB(DeckName, GameName, Description, setModalVisible, refreshDecks, onChangeDeckName, onChangeGameName, onChangeDescription);
+                    }}
+                >
+                    <Text style={styles.textStyle}>OK</Text>
+                </Pressable>
+            </View>
+        </View>
+    </View>
+</Modal>
+
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={deckModalVisible}
+                    onRequestClose={() => {
+                        setDeckModalVisible(!deckModalVisible);
+                    }}
+                >
+                </Modal>
+                    </View>
+                    {deckModalVisible && (
+                        <Modal
             animationType="fade"
             transparent={true}
             visible={deckModalVisible}
             onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
-                setDeckModalVisible(!deckModalVisible);
-            }}>
-                <View style={styles.centeredDeckView}>
-                    <View style={styles.backButton}>
-                        <Pressable onPress={() => setDeckModalVisible(!deckModalVisible)}>
-                            <AntDesign name="arrowleft" size={24} color="white" />
-                        </Pressable>
-                        <View style={{marginHorizontal: 160}}/>
-                        {editEnabled
-                            ? 
-                            <Pressable onPress={() => saveChanges()}>
-                                <FontAwesome name="save" size={24} color="white" />
+                setDeckModalVisible(false);
+            }}
+                >
+                    <View style={styles.centeredDeckView}>
+                        <View style={styles.backButton}>
+                            <Pressable onPress={() => setDeckModalVisible(false)}>
+                                <AntDesign name="close" size={24} color="black" />
                             </Pressable>
-                            :
-                            <Pressable onPress={() => activateEdit()}>
-                                <FontAwesome name="gear" size={24} color="white" />
-                            </Pressable>
-                        }
-
-                    </View>
-                    <View style={{flexDirection: 'row', width: '90%'}}>
-                        <Text style={styles.logoDeckText}>LOGO</Text>
-                        <View>
-                            <TextInput 
-                                style={styles.deckNamePopup}
-                                onChangeText={onChangeEditName}
-                                value={currentDeck.name}
-                                editable={editEnabled}
-                            />
-                            <View style={{width: '80%'}}>
-                                <TextInput 
-                                    style={styles.deckDesPopup}
-                                    multiline
-                                    onChangeText={onChangeEditDes}
-                                    value={currentDeck.description}
-                                    editable={editEnabled}
-                                />
-                            </View>
-                        </View>
-                    </View>
-                    
-                    <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 15}}>
-                        <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
-                        <View>
-                            <Text style={{width: 50, textAlign: 'center', color: 'white'}}>Cards</Text>
-                        </View>
-                        <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
-                    </View>
-
-                    <View style={{width: '90%', height: '65%'}}>
-                        <FlatList
-                            data = {currentDeck.cards}
-                            renderItem={({ item }) =>
-                            <View style={styles.cardList}>
-                                <Text style={styles.cardText}>{item.name}</Text>
-                            </View>
-                            }
-                        />
-                    </View>
-
-                    <Pressable onPress={onAddPress}>
-                        <View style={[styles.button, styles.deckButton]}>
-                            <Text style={styles.buttonText}>+ Add New Card</Text>
-                        </View>
-                    </Pressable>
-                </View>
-            </Modal>
-
-            <View style={styles.deckGrid}>
-                <FlatList
-                    data = {dummyData.Decks}
-                    renderItem={({ item }) =>
-                    <Pressable onPress={() => deckPopupSetup(item)}>
-                    <View style={styles.opaqueBox}>
-                        <View style={styles.deckBox}>
-                            <Text style={styles.logoText}>LOGO</Text>
+                            
                             <View>
-                                <Text>{item.name}</Text>
-                                <Text>{item.game}</Text>
+
+                                <View style={styles.paddedView}> 
+                                    <Text style={styles.logoText}>LOGO</Text>
+                                </View>
+
+                                <View style={styles.line}></View>
+
+                                <View style={styles.deckContainer}>
+                                    <Text style={styles.titleText} >{currentDeck.name}</Text>
+                                </View>
+                                
+                                <View style={styles.deckContainer}>
+                                    <Text style={styles.subHeading}>Game: {currentDeck.game}</Text>
+                                </View>
+                            
+                                <View style={styles.deckDescription}>
+                                    <Text>Description:      </Text>
+                                    <Text>     </Text>
+                                    <Text>      {currentDeck.description}</Text>
+                                </View>
+
+                                <View style={styles.line}></View>
+                                <Text style={styles.CText}>CARDS:  </Text>
+                                    {/* Render the cards */}
+                                <FlatList
+                                    data={deckCards}
+                                    renderItem={({ item }) => (
+                                        <Text>{item.id}</Text>
+                                    )}
+                                    keyExtractor={item => item.id.toString()}
+                                />
+
+                                
+
                             </View>
                         </View>
+                        <View style={styles.deckButtonSpace}>
+                            {/* <Pressable onPress={() => setModalVisible(true)}>
+                                 <View style={[styles.button, styles.deckButton]}>
+                                    <Text style={styles.buttonText}>+ Add Card</Text>
+                                </View>
+                            </Pressable>
+                            <Pressable onPress={() => setModalVisible(true)}>
+                                 <View style={[styles.button, styles.deckButton]}>
+                                    <Text style={styles.buttonText}> Delete Deck</Text>
+                                </View>
+                            </Pressable> */}
                         </View>
-                    </Pressable>
-                    }
-                />
-            </View>
-            <View style={styles.deckButtonSpace}>
-                <Pressable onPress={() => setModalVisible(true)}>
-                    <View style={[styles.button, styles.deckButton]}>
-                        <Text style={styles.buttonText}>+ Create New Deck</Text>
                     </View>
-                </Pressable>
-            </View>
+                </Modal>
+                            )}     
         </SafeAreaView>
     );
-
 };
+
 
 const styles = StyleSheet.create({
     container: {
@@ -199,23 +240,105 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    paddedView: {
+        padding: 50, 
+        // paddingTop: 10,
+        // paddingRight: 15,
+        // paddingBottom: 5,
+         paddingLeft: 115,
+      },
+      paddedViewLEFT: {
+        padding: 10, 
+         paddingTop: 20,
+        // paddingRight: 15,
+        // paddingBottom: 5,
+         paddingLeft: 0
+         ,
+      },
+      line: {
+        borderBottomColor: 'black', 
+        borderBottomWidth: 1, 
+        marginVertical: 0, 
+        marginLeft: -20, 
+        marginRight:-60,
+      },
     deckGrid: {
         flex: 12,
         padding: 10,
     },
     deckButtonSpace: {
-        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 0,
+        left: 10,
+        padding: 0,
+        right: 10,
+    },
+    cardsTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginTop: 20,
+        marginBottom: 10,
+        textAlign: 'center',
+      },
+      cardList: {
+        flexGrow: 0, 
+      },
+      cardName: {
+        fontSize: 16,
+        marginVertical: 5,
+        textAlign: 'center',
+      },
+    label: {
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    value: {
+        marginBottom: 15,
     },
     buttonText: {
         fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
     }, 
+    deckInfo: {
+        fontSize: 16, // Slightly smaller font size for game and description
+        color: '#555', // A slightly lighter color for subtext
+        lineHeight: 24, // Enough space between lines of text
+        paddingVertical: 2, // Less vertical padding for subtext
+        paddingHorizontal: 10, // Maintain consistent horizontal padding
+        textAlign: 'left', // Align text to the left for these elements
+      },
+      deckDescription: {
+        fontSize: 14, // Even smaller font size for the description if it's longer
+        color: '#777', // A lighter color for less important information
+        lineHeight: 20, // Adequate space between lines of text
+        paddingVertical: 2,
+        paddingHorizontal: 10,
+        textAlign: 'left',
+      },
     logoText: {
         fontSize: 40,
         fontWeight: 'bold',
         color: 'black',
         marginRight: 10,
+    }, 
+    CText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'black',
+        marginRight: 10,
+        paddingTop: 20,
+    }, 
+    titleText: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: 'black',
+        marginRight: 10,
+        marginLeft: 10,
+
     }, 
     centeredView: {
         flex: 1,
@@ -245,6 +368,14 @@ const styles = StyleSheet.create({
     },
     deckButton: {
         backgroundColor: '#350023',
+        flexDirection: 'row', // Aligns children (buttons) in a horizontal row
+    justifyContent: 'space-evenly', // Evenly distributes buttons across the container
+    alignItems: 'center', // Centers buttons vertically
+    position: 'absolute', // Positions the container absolutely to the parent view
+    bottom: 0, // Aligns the container to the bottom of the parent view
+    left: 0, // Aligns the container to the left of the parent view
+    right: 0, // Aligns the container to the right of the parent view
+    padding: 10,
     },
     buttonClose: {
         backgroundColor: '#350023',
@@ -272,6 +403,14 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 16,
     },
+    addButton: {
+        backgroundColor: '#350023', // Magenta color
+        padding: 15,
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
     inputBox: {
         borderWidth: 2,
         width: 150,
@@ -283,17 +422,22 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     centeredDeckView: {
-        height: '75%',
-        width: '100%',
-        backgroundColor: '#BBA5B0',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 90,
+        flex: 1,
+        backgroundColor: 'white', 
+        margin: 5, 
+        marginTop: 100, 
+        marginBottom: 0, 
+        borderRadius: 40, 
+        overflow: 'hidden', 
+        borderColor: 'grey', 
+        borderWidth: 5, 
     },
     backButton: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
         marginVertical: 10,
+        alignSelf: 'left',
+        padding: 10,
     },
     checkbox: {
         alignSelf: 'center',
@@ -333,4 +477,23 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 10,
     },
+        container: {
+            flex: 1,
+            padding: 20,
+            backgroundColor: '#ffffff',
+        },
+        heading: {
+            fontSize: 24,
+            fontWeight: 'bold',
+            marginBottom: 10,
+        },
+        subHeading: {
+            fontSize: 18,
+            marginBottom: 10,
+            marginLeft: 10,
+        },
+        description: {
+            fontSize: 16,
+        },
+    
 });

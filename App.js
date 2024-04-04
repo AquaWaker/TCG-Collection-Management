@@ -14,6 +14,7 @@ import {
   insertCard,
   getAllCards,
   deleteAllCards,
+  insertDeck,
 } from './database';
 
 function CustomTitle() {
@@ -173,6 +174,12 @@ export default function App() {
           insertCard(card);
         });
 
+        dummyData.Decks.forEach(deck => {
+          insertDeck(deck, deck.cards).then(() => {
+            //console.log(`Deck "${deck.name}" inserted successfully.`);
+          }).catch(error => console.error(`Error inserting deck: ${error}`));
+        });
+
         fetchCards()
           .then(() => {
             setIsLoading(false);
@@ -258,6 +265,7 @@ export default function App() {
             }}
           />
         </Drawer.Navigator>
+        
       </NavigationContainer>
     );
   }
