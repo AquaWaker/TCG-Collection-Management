@@ -49,15 +49,15 @@ export const FiltersPage = () => {
     ]
 
     function searchWithFilters () {
-        var filters = {
+        changeFilters({
             name: name,
             game: genreOption,
             id: setid,
             price: price,
             operation: priceOperation,
-        };
+        });
 
-        navigation.navigate("SEARCH RESULTS", filters);
+        navigation.navigate("SEARCH RESULTS");
     }
 
     return (

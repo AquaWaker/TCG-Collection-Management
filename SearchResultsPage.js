@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Alert,
     Modal,
@@ -16,8 +16,11 @@ import { Entypo, Ionicons, AntDesign } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
+import { searchCards, getAllCards } from './database';
 
-export const SearchResultsPage = ({ route }) => {
+import { useFilters } from './FiltersContext';
+
+export const SearchResultsPage = () => {
 
     const [searchQuery, onChangeSearchQuery] = React.useState('Search');
     const [viewLayout, setViewLayout] = React.useState('grid');
@@ -27,13 +30,40 @@ export const SearchResultsPage = ({ route }) => {
     const navigation = useNavigation();
  
     const placeholderImage = require('./assets/wireframe.png');
-    const { cards: cardData } = route.params;
-    const cards = cardData.map(card => ({
-        ...card,
-        details: JSON.parse(card.details)
-    }));
+    const [cards, setCards] = useState([]);
+    const { filters } = useFilters();
+
+    const fetchCards = (filters) => {
+        return new Promise((resolve, reject) => {
+            searchCards(filters)
+                .then(result => {
+                    var cards = result.rows._array.map(card => ({
+                        ...card,
+                        details: JSON.parse(card.details)
+                    }));
+                    setCards(cards);
+                    resolve();
+                })
+                .catch(error => {
+                    console.error('Error fetching items:', error);
+                    reject(error);
+                });
+        });
+    }
+
+    useEffect(() => {
+        fetchCards(filters);
+    })
 
     const onSubmitSearch = () => {
+        changeFilters({
+            name: searchQuery,
+            game: null,
+            id: null,
+            price: '-1',
+            operation: "=",
+        });
+
         navigation.navigate("SEARCH RESULTS");
     }
 

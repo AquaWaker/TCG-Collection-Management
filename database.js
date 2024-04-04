@@ -91,8 +91,10 @@ export const getAllCards = () => {
 };
 
 export const searchCards = (filters) => {
-    var databaseSearch = 'SELECT * FROM cards ';
+    var databaseSearch = 'SELECT * FROM cards';
     var addAnd = 0;
+    console.log("Filters in the Database call: ");
+    console.log(filters);
 
     if (filters.name != "") {
         databaseSearch += 'WHERE name = ' + filters.name;
@@ -122,6 +124,8 @@ export const searchCards = (filters) => {
         databaseSearch += 'WHERE price ' + filters.operation + ' ' + filters.price ;
         addAnd = 1;
     }
+
+    console.log("Search Command is: " + databaseSearch);
 
     return new Promise((resolve, reject) => {
         db.transaction(tx => {
