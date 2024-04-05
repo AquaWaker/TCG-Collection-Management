@@ -183,10 +183,13 @@ export const SearchResultsPage = () => {
                 game: game,
                 price: price,
                 description: description,
-                details: details,
+                details: [details],
+                image: undefined,
             }
+            console.log(card);
 
             insertCard(card);
+            setAddCardVisible(false);
         }
 
         return (
@@ -244,7 +247,7 @@ export const SearchResultsPage = () => {
                                 onChangeText={changeId}
                                 placeholderTextColor={'black'}
                                 value={id}
-                                placeholder='0'
+                                placeholder='Enter...'
                             />
 
                             <Text style={styles.modalCardTitle}>Set ID</Text>
@@ -256,7 +259,7 @@ export const SearchResultsPage = () => {
                                 onChangeText={changeSetId}
                                 placeholderTextColor={'black'}
                                 value={setId}
-                                placeholder='0'
+                                placeholder='Enter...'
                             />
 
                             <Text style={styles.modalCardTitle}>Cost</Text>
