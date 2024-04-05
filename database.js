@@ -14,9 +14,9 @@ export const initializeDatabase = () => {
                     id INTEGER PRIMARY KEY,
                     name TEXT,
                     setid TEXT,
+                    game TEXT,
                     description TEXT,
                     details TEXT,
-                    game TEXT,
                     cost INTEGER,
                     copies INTEGER,
                     image TEXT,
@@ -41,12 +41,13 @@ export const insertCard = (card) => {
         db.transaction(tx => {
             tx.executeSql(
                 `INSERT OR IGNORE INTO cards
-                (id, name, setid, description, details, cost, copies, image, price)
+                (id, name, setid, game, description, details, cost, copies, image, price)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     card.id,
                     card.name,
                     card.setid,
+                    card.game,
                     card.description,
                     JSON.stringify(card.details),
                     card.cost,

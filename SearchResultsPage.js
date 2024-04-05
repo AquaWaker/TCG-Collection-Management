@@ -19,6 +19,7 @@ LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
 
 import { useFilters } from './FiltersContext';
 import { useResults } from './SearchResultsContext';
+import { insertCard } from './database';
 
 export const SearchResultsPage = () => {
 
@@ -162,7 +163,31 @@ export const SearchResultsPage = () => {
     };
 
     const AddCardModal = () => {
+        const [title, setTitle] = useState("");
+        const [id, changeId] = useState("");
+        const [setId, changeSetId] = useState("");
+        const [cost, setCost] = useState(0);
+        const [copies, setCopies] = useState(0);
+        const [game, setGame] = useState("");
+        const [price, setPrice] = useState(0);
+        const [description, setDescription] = useState("");
+        const [details, setDetails] = useState("");
 
+        function addNewCard() {
+            var card = {
+                name: title,
+                id: id,
+                setId: setId,
+                cost: cost,
+                copies: copies,
+                game: game,
+                price: price,
+                description: description,
+                details: details,
+            }
+
+            insertCard(card);
+        }
 
         return (
             <Modal
@@ -204,6 +229,9 @@ export const SearchResultsPage = () => {
                             <Text style={styles.modalCardTitle}>Title</Text>
                             <TextInput
                                 style={[styles.addCardInput]}
+                                onChangeText={setTitle}
+                                placeholderTextColor={'black'}
+                                value={title}
                                 placeholder='Enter...'
                             />
 
@@ -213,6 +241,9 @@ export const SearchResultsPage = () => {
                                     styles.addCardInput,
                                     {width: '20%'}
                                 ]}
+                                onChangeText={changeId}
+                                placeholderTextColor={'black'}
+                                value={id}
                                 placeholder='0'
                             />
 
@@ -222,6 +253,9 @@ export const SearchResultsPage = () => {
                                     styles.addCardInput,
                                     {width: '20%'}
                                 ]}
+                                onChangeText={changeSetId}
+                                placeholderTextColor={'black'}
+                                value={setId}
                                 placeholder='0'
                             />
 
@@ -231,6 +265,10 @@ export const SearchResultsPage = () => {
                                     styles.addCardInput,
                                     {width: '20%'}
                                 ]}
+                                onChangeText={setCost}
+                                keyboardType='numeric'
+                                placeholderTextColor={'black'}
+                                value={cost}
                                 placeholder='0'
                             />
 
@@ -240,18 +278,29 @@ export const SearchResultsPage = () => {
                                     styles.addCardInput,
                                     {width: '20%'}
                                 ]}
+                                keyboardType='numeric'
+                                placeholderTextColor={'black'}
+                                onChangeText={setCopies}
+                                value={copies}
                                 placeholder='0'
                             />
                             
                             <Text style={styles.modalCardTitle}>Game</Text>
                             <TextInput
                                 style={[styles.addCardInput]}
+                                onChangeText={setGame}
+                                placeholderTextColor={'black'}
+                                value={game}
                                 placeholder='Enter...'
                             />
 
                             <Text style={styles.modalCardTitle}>Price</Text>
                             <TextInput
                                 style={[styles.addCardInput]}
+                                onChangeText={setPrice}
+                                keyboardType='numeric'
+                                placeholderTextColor={'black'}
+                                value={price}
                                 placeholder='Enter...'
                             />
 
@@ -261,6 +310,9 @@ export const SearchResultsPage = () => {
                                     styles.addCardInput,
                                     {height: 100}
                                 ]}
+                                placeholderTextColor={'black'}
+                                onChangeText={setDescription}
+                                value={description}
                                 placeholder='Enter...'
                             />
                             
@@ -270,17 +322,22 @@ export const SearchResultsPage = () => {
                                     styles.addCardInput,
                                     {height: 100}
                                 ]}
+                                placeholderTextColor={'black'}
+                                onChangeText={setDetails}
+                                value={details}
                                 placeholder='Enter...'
                             />
                         </ScrollView>
                     </View>
 
-                    <View style={[
-                        styles.addCardModalButton,
-                        {paddingHorizontal: 15}
-                    ]}>
+                    <Pressable 
+                        style={[
+                            styles.addCardModalButton,
+                            {paddingHorizontal: 15}
+                        ]}
+                        onPress={() => addNewCard()}>
                         <Text style={styles.addCardText}>+ Add Card</Text>
-                    </View>
+                    </Pressable>
                     
                 </View>
             </Modal>
@@ -538,6 +595,7 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'white',
         borderColor: '#350023',
+        color: 'black',
         borderWidth: 2,
         borderRadius: 10,
         paddingHorizontal: 10,

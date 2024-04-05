@@ -97,7 +97,7 @@ export const FiltersPage = () => {
                 />
                 <View style={styles.dropdownBox}>
                     <RNPickerSelect
-                        style={{width: "100%", height: "100%"}}
+                        style={pickerSelectStyles}
                         placeholder={OpPlaceholder}
                         items={operations}
                         onValueChange={(value) => setOperation(value)}
@@ -108,7 +108,7 @@ export const FiltersPage = () => {
                 <Text>Sort by Game or Genre</Text>
                 <View style={styles.dropdownBox}>
                     <RNPickerSelect
-                        style={{width: "100%", height: "100%"}}
+                        style={pickerSelectStyles}
                         placeholder={placeholder}
                         items={optionsGenre}
                         onValueChange={(value) => setGenreOption(value)}
@@ -171,4 +171,21 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 14,
+        paddingHorizontal: 12,
+        color: 'black',
+        paddingRight: 30 // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        color: 'black',
+        paddingRight: 30 // to ensure the text is never behind the icon
+    }
 });

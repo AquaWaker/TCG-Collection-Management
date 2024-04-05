@@ -67,8 +67,7 @@ function HomeScreen() {
   };
 
   const onFilterPress = () => {
-    setFilterModalVisible(true);
-    console.log("Filter button pressed");
+    navigation.navigate("ADVANCED FILTERS");
   };
 
   const onCloseModal = () => {
@@ -104,7 +103,7 @@ function HomeScreen() {
         <View style={styles.filterButtonOuterContainer}>
           <View style={styles.filterButtonContainer}>
             <Pressable style={styles.filterButton} onPress={onFilterPress}>
-              <Text style={styles.filterButtonText}>Filters</Text>
+              <Text style={styles.filterButtonText}>Advanced Filters</Text>
             </Pressable>
           </View>
         </View>
@@ -206,10 +205,9 @@ export default function App() {
               drawerInactiveTintColor: "#999", 
             }}>
               <Drawer.Screen
-                name="HOME"
+                name="SHUFFLED"
                 component={HomeScreen}
                 options={{
-                  headerTitle: (props) => <CustomTitle {...props} />,
                   headerStyle: {
                     backgroundColor: "#45062E",
                   },
@@ -222,7 +220,7 @@ export default function App() {
                 }}
               />
               <Drawer.Screen
-                name="ADVANCED SEARCH"
+                name="ADVANCED FILTERS"
                 component={AdvancedSearch}
                 options={{
                   headerStyle: {
@@ -239,7 +237,6 @@ export default function App() {
                 name="SEARCH RESULTS"
                 component={SearchResults}
                 options={{
-                  headerTitle: (props) => <SearchTitle {...props} />,
                   headerStyle: {
                     backgroundColor: "#45062E",
                   },
@@ -254,7 +251,6 @@ export default function App() {
                 name="DECKS"
                 component={DecksPage}
                 options={{
-                  headerTitle: (props) => <DeckTitle {...props} />,
                   headerStyle: {
                     backgroundColor: "#45062E",
                   },
