@@ -12,6 +12,7 @@ import {
   } from './database';
 
 import { useFilters } from './FiltersContext';
+import { useResults } from './SearchResultsContext';
 
 export const FiltersPage = () => {
 
@@ -21,6 +22,8 @@ export const FiltersPage = () => {
     const [price, onChangePrice] = React.useState('-1');
     const [priceOperation, setOperation] = React.useState("=");
     const { changeFilters } = useFilters();
+    const { searchResults } = useResults();
+
     const navigation = useNavigation();
 
     const placeholder = {
@@ -52,13 +55,15 @@ export const FiltersPage = () => {
     ]
 
     function searchWithFilters () {
-        changeFilters({
+        const newFilters = {
             name: name,
             game: genreOption,
             id: setid,
             price: price,
             operation: priceOperation,
-        });
+        };
+        changeFilters(newFilters);
+        searchResults(newFilters);
 
         navigation.navigate("SEARCH RESULTS");
     }

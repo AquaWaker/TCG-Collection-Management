@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
     Alert,
     Modal,
@@ -11,63 +11,35 @@ import {
     Pressable,
     TextInput
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { Entypo, Ionicons, AntDesign } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
-import { searchCards, getAllCards } from './database';
 
 import { useFilters } from './FiltersContext';
+import { useResults } from './SearchResultsContext';
 
 export const SearchResultsPage = () => {
 
-    const [searchQuery, onChangeSearchQuery] = React.useState('Search');
+    const [searchQuery, onChangeSearchQuery] = React.useState('');
     const [viewLayout, setViewLayout] = React.useState('grid');
     const [modalVisible, setModalVisible] = useState(false);
     const [currentCard, setCurrentCard] = useState(require('./empty_card.json'));
-    
-    const navigation = useNavigation();
- 
+
     const placeholderImage = require('./assets/wireframe.png');
-    const [cards, setCards] = useState([]);
-    const { filters, changeFilters } = useFilters();
-
-    const fetchCards = (filters) => {
-        return new Promise((resolve, reject) => {
-            searchCards(filters)
-                .then(result => {
-                    var cards = result.rows._array.map(card => ({
-                        ...card,
-                        details: JSON.parse(card.details)
-                    }));
-                    setCards(cards);
-                    resolve();
-                })
-                .catch(error => {
-                    console.error('Error fetching items:', error);
-                    reject(error);
-                });
-        });
-    }
-
-    useEffect(() => {
-        fetchCards(filters)
-            .then(() => {
-                console.log("Filtered cards retrieved successfully.");
-            });
-    }, [])
+    const { results, searchResults } = useResults();
+    const { changeFilters } = useFilters();
 
     const onSubmitSearch = () => {
-        changeFilters({
+        const newFilters = {
             name: searchQuery,
             game: null,
-            id: null,
+            id: '',
             price: '-1',
             operation: "=",
-        });
-
-        navigation.navigate("SEARCH RESULTS");
+        }
+        changeFilters(newFilters);
+        searchResults(newFilters);
     }
 
     const popupModal = (card) => {
@@ -185,14 +157,14 @@ export const SearchResultsPage = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            { cards.length == 0 
+            { results.length == 0 
                 ?   <Text style={{
                         fontSize: 30,
                         fontWeight: '500',
                         color: 'gray',
                         textAlign: 'center',
                     }}>
-                        No Cards Stored
+                        No Results Found
                     </Text>
                 :   <View style={styles.container}>
                         <CardModal/>
@@ -208,14 +180,14 @@ export const SearchResultsPage = () => {
                             { viewLayout == 'row'
                                 ? <FlatList
                                     key={'rowList'}
-                                    data={cards}
+                                    data={results}
                                     renderItem={({ item }) => 
                                         <ResultRow card={item}/>
                                     }
                                 />
                                 : <FlatList
                                     key={'gridList'}
-                                    data = {cards}
+                                    data = {results}
                                     numColumns={2}
                                     renderItem={({ item }) => 
                                         <View style={styles.resultGrid}>
@@ -225,20 +197,17 @@ export const SearchResultsPage = () => {
                                 />
                             }
                         </View>
-                        <View style={styles.inputBoxContainer}>
-                            <TextInput
-                                style={styles.inputBox}
-                                onChangeText={onChangeSearchQuery}
-                                onSubmitEditing={onSubmitSearch}
-                                value={searchQuery}
-                                placeholder="Search"
-                            />
-                            <View>
-                            {/* Insert search filters here */}
-                            </View>
-                        </View>
                     </View>
             }
+            <View style={styles.inputBoxContainer}>
+                <TextInput
+                    style={styles.inputBox}
+                    onChangeText={onChangeSearchQuery}
+                    onSubmitEditing={onSubmitSearch}
+                    value={searchQuery}
+                    placeholder="Search"
+                />
+            </View>
         </SafeAreaView>
     );
 

@@ -16,6 +16,10 @@ import {
 } from './database';
 
 import { FiltersProvider } from "./FiltersContext";
+import { SearchResultsProvider } from "./SearchResultsContext";
+
+import { useResults } from "./SearchResultsContext";
+import { useFilters } from "./FiltersContext";
 
 function CustomTitle() {
   return (
@@ -42,16 +46,22 @@ function DeckTitle() {
 function HomeScreen() {
   const [searchQuery, onChangeSearchQuery] = React.useState("");
   const [isFilterModalVisible, setFilterModalVisible] = useState(false);
+  const { changeFilters } = useFilters();
+  const { searchResults } = useResults();
+  
   const navigation = useNavigation();
 
   const onSubmitSearch = () => {
-    changeFilters({
+    const newFilters = {
       name: searchQuery,
       game: null,
       id: null,
       price: '-1',
       operation: "=",
-    });
+    };
+    
+    changeFilters(newFilters);
+    searchResults(newFilters);
 
     navigation.navigate("SEARCH RESULTS");
   };
@@ -186,76 +196,78 @@ export default function App() {
   } else {
     return (
       <FiltersProvider>
-        <NavigationContainer>
-          <Drawer.Navigator initialRouteName="Home" screenOptions={{
-            drawerStyle: {
-              backgroundColor: "rgba(53, 0, 35, 0.9)", 
-            },
-            drawerActiveTintColor: "white",
-            drawerInactiveTintColor: "#999", 
-          }}>
-            <Drawer.Screen
-              name="HOME"
-              component={HomeScreen}
-              options={{
-                headerTitle: (props) => <CustomTitle {...props} />,
-                headerStyle: {
-                  backgroundColor: "#45062E",
-                },
-                headerTintColor: "#fff",
-                headerTitleStyle: {
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  fontSize: 28,
-                },
-              }}
-            />
-            <Drawer.Screen
-              name="ADVANCED SEARCH"
-              component={AdvancedSearch}
-              options={{
-                headerStyle: {
-                  backgroundColor: "#45062E",
-                },
-                headerTintColor: "#fff",
-                headerTitleStyle: {
-                  fontWeight: "bold",
-                  textAlign: "center",
-                },
-              }}
-            />
-            <Drawer.Screen
-              name="SEARCH RESULTS"
-              component={SearchResults}
-              options={{
-                headerTitle: (props) => <SearchTitle {...props} />,
-                headerStyle: {
-                  backgroundColor: "#45062E",
-                },
-                headerTintColor: "#fff",
-                headerTitleStyle: {
-                  fontWeight: "bold",
-                  textAlign: "center",
-                },
-              }}
-            />
-            <Drawer.Screen
-              name="DECKS"
-              component={DecksPage}
-              options={{
-                headerTitle: (props) => <DeckTitle {...props} />,
-                headerStyle: {
-                  backgroundColor: "#45062E",
-                },
-                headerTintColor: "#fff",
-                headerTitleStyle: {
-                  fontWeight: "bold",
-                  textAlign: "center",
-                },
-              }}
-            />
-          </Drawer.Navigator>
-        </NavigationContainer>
+        <SearchResultsProvider>
+          <NavigationContainer>
+            <Drawer.Navigator initialRouteName="Home" screenOptions={{
+              drawerStyle: {
+                backgroundColor: "rgba(53, 0, 35, 0.9)", 
+              },
+              drawerActiveTintColor: "white",
+              drawerInactiveTintColor: "#999", 
+            }}>
+              <Drawer.Screen
+                name="HOME"
+                component={HomeScreen}
+                options={{
+                  headerTitle: (props) => <CustomTitle {...props} />,
+                  headerStyle: {
+                    backgroundColor: "#45062E",
+                  },
+                  headerTintColor: "#fff",
+                  headerTitleStyle: {
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    fontSize: 28,
+                  },
+                }}
+              />
+              <Drawer.Screen
+                name="ADVANCED SEARCH"
+                component={AdvancedSearch}
+                options={{
+                  headerStyle: {
+                    backgroundColor: "#45062E",
+                  },
+                  headerTintColor: "#fff",
+                  headerTitleStyle: {
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  },
+                }}
+              />
+              <Drawer.Screen
+                name="SEARCH RESULTS"
+                component={SearchResults}
+                options={{
+                  headerTitle: (props) => <SearchTitle {...props} />,
+                  headerStyle: {
+                    backgroundColor: "#45062E",
+                  },
+                  headerTintColor: "#fff",
+                  headerTitleStyle: {
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  },
+                }}
+              />
+              <Drawer.Screen
+                name="DECKS"
+                component={DecksPage}
+                options={{
+                  headerTitle: (props) => <DeckTitle {...props} />,
+                  headerStyle: {
+                    backgroundColor: "#45062E",
+                  },
+                  headerTintColor: "#fff",
+                  headerTitleStyle: {
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  },
+                }}
+              />
+            </Drawer.Navigator>
+          </NavigationContainer>
+        </SearchResultsProvider>
       </FiltersProvider>
     );
   }
