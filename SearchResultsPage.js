@@ -9,7 +9,8 @@ import {
     FlatList,
     ImageBackground,
     Pressable,
-    TextInput
+    TextInput,
+    ScrollView
 } from 'react-native';
 import { Entypo, Ionicons, AntDesign } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -23,7 +24,8 @@ export const SearchResultsPage = () => {
 
     const [searchQuery, onChangeSearchQuery] = React.useState('');
     const [viewLayout, setViewLayout] = React.useState('grid');
-    const [modalVisible, setModalVisible] = useState(false);
+    const [cardInfoVisible, setCardInfoModalVisible] = useState(false);
+    const [addCardVisible, setAddCardVisible] = useState(false);
     const [currentCard, setCurrentCard] = useState(require('./empty_card.json'));
 
     const placeholderImage = require('./assets/wireframe.png');
@@ -42,14 +44,18 @@ export const SearchResultsPage = () => {
         searchResults(newFilters);
     }
 
-    const popupModal = (card) => {
+    const popupCardInfoModal = (card) => {
         setCurrentCard(card);
-        setModalVisible(true);
+        setCardInfoModalVisible(true);
+    }
+
+    const popupAddCardModal = () => {
+        setAddCardVisible(true);
     }
 
     const ResultRow = ({card}) => {
         return (
-            <Pressable onPress={() => popupModal(card)}>
+            <Pressable onPress={() => popupCardInfoModal(card)}>
                 <View style={styles.resultRow}>
                     <View style={styles.resultRowThumbnailView}>
                         <ImageBackground
@@ -70,7 +76,7 @@ export const SearchResultsPage = () => {
     const ResultGrid = ({card}) => {
         return (
             <View style={styles.resultGridThumbnailView}>
-                <Pressable onPress={() => popupModal(card)}>
+                <Pressable onPress={() => popupCardInfoModal(card)}>
                     <ImageBackground
                         style={styles.cardThumbnail}
                         source={card.image ? {uri: card.image} : placeholderImage}
@@ -81,20 +87,20 @@ export const SearchResultsPage = () => {
         )
     };
 
-    const CardModal = () => {
+    const CardInfoModal = () => {
         return (
             <Modal
                 animationType="fade"
                 transparent={true}
-                visible={modalVisible}
+                visible={cardInfoVisible}
                 onRequestClose={() => {
                     Alert.alert('Modal has been closed.');
-                    setModalVisible(false);
+                    setCardInfoModalVisible(false);
                 }}
             >
                 <View style={styles.modalView}>
                     <Pressable
-                        onPress={() => setModalVisible(false)}
+                        onPress={() => setCardInfoModalVisible(false)}
                         style={styles.modalCloseButton}
                     >
                         <AntDesign name="arrowleft" size={24} color="white" />
@@ -155,8 +161,135 @@ export const SearchResultsPage = () => {
         );
     };
 
+    const AddCardModal = () => {
+
+
+        return (
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={addCardVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setAddCardVisible(false);
+                }}
+            >
+                <View style={styles.modalView}>
+                    <Pressable
+                        onPress={() => setAddCardVisible(false)}
+                        style={styles.modalCloseButton}
+                    >
+                        <AntDesign name="arrowleft" size={24} color="white" />
+                    </Pressable>
+
+                    <View style={{
+                        width: '100%',
+                        alignItems: 'center'
+                    }}>
+                        <Text style={[
+                            styles.modalCardTitle,
+                            {fontSize: 25}
+                        ]}>
+                            ADD NEW CARD
+                        </Text>
+                    </View>
+
+                    <View style={styles.modalDividerLine}/>
+                    
+                    <View style={[styles.modalSummaryView, {flex: 1}]}>
+                        <ScrollView style={[
+                            styles.modalSummaryTextView,
+                            {width: '100%'}
+                        ]}>
+                            <Text style={styles.modalCardTitle}>Title</Text>
+                            <TextInput
+                                style={[styles.addCardInput]}
+                                placeholder='Enter...'
+                            />
+
+                            <Text style={styles.modalCardTitle}>Card ID</Text>
+                            <TextInput
+                                style={[
+                                    styles.addCardInput,
+                                    {width: '20%'}
+                                ]}
+                                placeholder='0'
+                            />
+
+                            <Text style={styles.modalCardTitle}>Set ID</Text>
+                            <TextInput
+                                style={[
+                                    styles.addCardInput,
+                                    {width: '20%'}
+                                ]}
+                                placeholder='0'
+                            />
+
+                            <Text style={styles.modalCardTitle}>Cost</Text>
+                            <TextInput
+                                style={[
+                                    styles.addCardInput,
+                                    {width: '20%'}
+                                ]}
+                                placeholder='0'
+                            />
+
+                            <Text style={styles.modalCardTitle}>Copies</Text>
+                            <TextInput
+                                style={[
+                                    styles.addCardInput,
+                                    {width: '20%'}
+                                ]}
+                                placeholder='0'
+                            />
+                            
+                            <Text style={styles.modalCardTitle}>Game</Text>
+                            <TextInput
+                                style={[styles.addCardInput]}
+                                placeholder='Enter...'
+                            />
+
+                            <Text style={styles.modalCardTitle}>Price</Text>
+                            <TextInput
+                                style={[styles.addCardInput]}
+                                placeholder='Enter...'
+                            />
+
+                            <Text style={styles.modalCardTitle}>Description</Text>
+                            <TextInput
+                                style={[
+                                    styles.addCardInput,
+                                    {height: 100}
+                                ]}
+                                placeholder='Enter...'
+                            />
+                            
+                            <Text style={styles.modalCardTitle}>Details</Text>
+                            <TextInput
+                                style={[
+                                    styles.addCardInput,
+                                    {height: 100}
+                                ]}
+                                placeholder='Enter...'
+                            />
+                        </ScrollView>
+                    </View>
+
+                    <View style={[
+                        styles.addCardModalButton,
+                        {paddingHorizontal: 15}
+                    ]}>
+                        <Text style={styles.addCardText}>+ Add Card</Text>
+                    </View>
+                    
+                </View>
+            </Modal>
+        );
+    };
+
     return (
         <SafeAreaView style={styles.container}>
+            <AddCardModal/>
             { results.length == 0 
                 ?   <Text style={{
                         fontSize: 30,
@@ -167,7 +300,7 @@ export const SearchResultsPage = () => {
                         No Results Found
                     </Text>
                 :   <View style={styles.container}>
-                        <CardModal/>
+                        <CardInfoModal/>
                         <View style={styles.layoutOptions}>
                             <TouchableOpacity onPress={() => setViewLayout('grid')}>
                                 <Entypo name="grid" size={40} color={viewLayout=='grid' ? '#247BA0' : 'black'} />
@@ -199,14 +332,26 @@ export const SearchResultsPage = () => {
                         </View>
                     </View>
             }
-            <View style={styles.inputBoxContainer}>
-                <TextInput
-                    style={styles.inputBox}
-                    onChangeText={onChangeSearchQuery}
-                    onSubmitEditing={onSubmitSearch}
-                    value={searchQuery}
-                    placeholder="Search"
-                />
+            <View style={{
+                width: '100%',
+                paddingVertical: 10,
+                alignItems: 'center',
+            }}>
+                <View style={styles.inputBoxContainer}>
+                    <TextInput
+                        style={styles.inputBox}
+                        onChangeText={onChangeSearchQuery}
+                        onSubmitEditing={onSubmitSearch}
+                        value={searchQuery}
+                        placeholder="Search"
+                    />
+                </View>
+                <Pressable
+                    onPress={popupAddCardModal}
+                    style={styles.addCardButton}
+                >
+                    <Text style={styles.addCardText}>+ Add Card</Text>
+                </Pressable>
             </View>
         </SafeAreaView>
     );
@@ -301,7 +446,7 @@ const styles = StyleSheet.create({
     layoutOptions: {
         flexDirection: 'row',
         width: '100%',
-        height: '5%',
+        height: '10%',
         justifyContent: 'flex-end',
     },
     layoutButton: {
@@ -371,4 +516,31 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
+    addCardButton: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        backgroundColor: '#350023',
+        marginHorizontal: 5,
+    },
+    addCardModalButton: {
+        borderRadius: 20,
+        padding: 10,
+        backgroundColor: '#350023',
+        marginHorizontal: 5,
+    },
+    addCardText: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    addCardInput: {
+        width: '100%',
+        backgroundColor: 'white',
+        borderColor: '#350023',
+        borderWidth: 2,
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        marginBottom: 10,
+    }
 });

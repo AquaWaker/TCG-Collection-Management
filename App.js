@@ -55,7 +55,7 @@ function HomeScreen() {
     const newFilters = {
       name: searchQuery,
       game: null,
-      id: null,
+      id: '',
       price: '-1',
       operation: "=",
     };
