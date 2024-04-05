@@ -77,11 +77,7 @@ export const insertCard = (card) => {
                     card.price
                 ],
                 (_, result) => {
-                    // if (result.insertId > 0) {
-                    //     console.log(`Card "${card.name}" inserted successfully`);
-                    // } else {
-                    //     console.log(`Card "${card.name}" already exists, skipping insertion`);
-                    // }
+                    console.log(`Card "${card.name}" inserted successfully`);
                     resolve(result);
                 },
                 (_, error) => {
