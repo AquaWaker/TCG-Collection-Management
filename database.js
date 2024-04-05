@@ -36,13 +36,34 @@ export const initializeDatabase = () => {
     });
 };
 
+export const updateDatabase = () => {
+    return new Promise((resolve, reject) => {
+        db.transaction(tx => {
+            tx.executeSql(
+                `ALTER TABLE cards
+                ADD game TEXT 
+                `,
+                [],
+                () => {
+                    console.log('Database modified');
+                    resolve();
+                },
+                (_, error) => {
+                    console.error('Error updating database:', error);
+                    reject(error);
+                }
+            );
+        });
+    });
+}
+
 export const insertCard = (card) => {
     return new Promise((resolve, reject) => {
         db.transaction(tx => {
             tx.executeSql(
                 `INSERT OR IGNORE INTO cards
                 (id, name, setid, game, description, details, cost, copies, image, price)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     card.id,
                     card.name,

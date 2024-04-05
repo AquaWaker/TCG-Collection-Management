@@ -169,7 +169,7 @@ export const SearchResultsPage = () => {
         const [cost, setCost] = useState(0);
         const [copies, setCopies] = useState(0);
         const [game, setGame] = useState("");
-        const [price, setPrice] = useState(0);
+        const [price, setPrice] = useState("");
         const [description, setDescription] = useState("");
         const [details, setDetails] = useState("");
 
@@ -298,7 +298,6 @@ export const SearchResultsPage = () => {
                             <TextInput
                                 style={[styles.addCardInput]}
                                 onChangeText={setPrice}
-                                keyboardType='numeric'
                                 placeholderTextColor={'black'}
                                 value={price}
                                 placeholder='Enter...'

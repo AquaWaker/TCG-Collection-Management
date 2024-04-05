@@ -13,7 +13,7 @@
             "cost": 2,
             "copies": 3,
             "image": "https://d2h5owxb2ypf43.cloudfront.net/cards/ARC159.webp",
-            "price": "$90"
+            "price": "90"
         },
         {
             "name": "Sol Ring",
@@ -25,7 +25,7 @@
             "cost": 1,
             "copies": 1,
             "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
-            "price": "$30"
+            "price": "30"
         },
         {
             "name": "Pluto - Mickey's Clever Friend",
@@ -37,7 +37,7 @@
             "cost": 1,
             "copies": 1,
             "image": "https://images.lorcania.com/cards/iti/152_en_pluto-716.webp",
-            "price": "$1"
+            "price": "1"
         },
         {
             "name": "Dhelmise V",
@@ -49,7 +49,7 @@
             "cost": 1,
             "copies": 1,
             "image": "https://assets.pokemon.com/assets/cms2/img/cards/web/SWSH1/SWSH1_EN_187.png",
-            "price": "$10"
+            "price": "10"
         }
     ],
     "Decks": [
@@ -65,7 +65,7 @@
                     "cost": 2,
                     "copies": 3,
                     "image": "https://d2h5owxb2ypf43.cloudfront.net/cards/ARC159.webp",
-                    "price": "$90"
+                    "price": "90"
                 }
             ]
         },
@@ -81,7 +81,7 @@
                     "cost": 1,
                     "copies": 1,
                     "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
-                    "price": "$30"
+                    "price": "30"
                 },
                 {
                     "name": "Island",
@@ -90,7 +90,7 @@
                     "cost": 1,
                     "copies": 1,
                     "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
-                    "price": "$30"
+                    "price": "30"
                 },
                 {
                     "name": "Swamp",
@@ -99,7 +99,7 @@
                     "cost": 1,
                     "copies": 1,
                     "image": "https://cards.scryfall.io/large/front/8/5/858e0b83-7927-4e34-ae25-6ad7a787ad97.jpg?1707553309",
-                    "price": "$30"
+                    "price": "30"
                 }
             ]
         }

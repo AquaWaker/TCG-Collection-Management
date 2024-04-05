@@ -12,6 +12,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import {
   initializeDatabase,
   insertCard,
+  updateDatabase,
   getAllCards,
 } from './database';
 
@@ -181,9 +182,22 @@ export default function App() {
         dummyData.Cards.forEach(card => {
           insertCard(card);
         });
-
-        setIsLoading(false);
       });
+      // Run only for making "Migrations"
+
+      // updateDatabase()
+      // .then(() => {
+      //   // Uncomment this to wipe all existing cards in db
+      //   // deleteAllCards();
+
+      //   // Load in dummy data
+      //   dummyData.Cards.forEach(card => {
+      //     insertCard(card);
+      //   });
+
+      // });
+      setIsLoading(false);
+
   }, []);
 
   if (isLoading) {
