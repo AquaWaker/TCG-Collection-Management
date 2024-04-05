@@ -36,6 +36,24 @@ export const initializeDatabase = () => {
     });
 };
 
+export const deleteDeck = (deckId, callback) => {
+    db.transaction(tx => {
+        tx.executeSql(
+            `DELETE FROM decks WHERE id = ?;`,
+            [deckId],
+            (_, result) => {
+                console.log('Deck deleted successfully');
+                callback(true);
+            },
+            (_, error) => {
+                console.error('Failed to delete deck:', error);
+                callback(false);
+                return true; 
+            }
+        );
+    });
+};
+
 export const insertCard = (card) => {
     return new Promise((resolve, reject) => {
         db.transaction(tx => {
@@ -71,30 +89,75 @@ export const insertCard = (card) => {
     });
 };
 
-export const getCardsForDeck = (deckId) => {
+// export const getCardsForDeck = (deckId) => {
+//     return new Promise((resolve, reject) => {
+//         db.transaction(tx => {
+//             tx.executeSql(
+//                 `SELECT c.* FROM cards c
+//                 JOIN deck_cards dc ON c.id = dc.card_id
+//                 WHERE dc.deck_id = ?`,
+//                 [deckId],
+//                 (_, result) => {
+//                     const cards = [];
+//                     for (let i = 0; i < result.rows.length; i++) {
+//                         cards.push(result.rows.item(i).stringify);
+//                     }
+//                     //console.log(`Cards for deck ${deckId} fetched successfully`);
+//                     //console.log(`Cards: ${cards}`);
+//                     resolve(cards);
+//                 },
+//                 (_, error) => {
+//                     console.error(`Error fetching cards for deck ${deckId}:`, error);
+//                     reject(error);
+//                 }
+//             );
+//         });
+//     });
+// };
+
+export const insertCardToDeck = (item, deckId) => {
     return new Promise((resolve, reject) => {
         db.transaction(tx => {
+            // Step 1: Check if the card already exists in the 'cards' table
             tx.executeSql(
-                `SELECT c.* FROM cards c
-                JOIN deck_cards dc ON c.id = dc.card_id
-                WHERE dc.deck_id = ?`,
-                [deckId],
+                `SELECT * FROM cards WHERE id = ?`,
+                [item.id],
                 (_, result) => {
-                    const cards = [];
-                    for (let i = 0; i < result.rows.length; i++) {
-                        cards.push(result.rows.item(i));
+                    // Step 2: If the card doesn't exist, insert it into the 'cards' table
+                    if (result.rows.length === 0) {
+                        tx.executeSql(
+                            `INSERT INTO cards (id, name, setid, cost, copies, image, price) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                            [item.id, item.name, item.setid, item.cost, item.copies, item.image, item.price],
+                            () => console.log('Card inserted'),
+                            (_, error) => reject(`Failed to insert card: ${error}`)
+                        );
                     }
-                    console.log(`Cards for deck ${deckId} fetched successfully`);
-                    resolve(cards);
+                    tx.executeSql(
+                        `SELECT * FROM deck_cards WHERE deck_id = ? AND card_id = ?`,
+                        [deckId, item.id],
+                        (_, linkResult) => {
+                            // Step 4: If the card is not linked, link it to the deck
+                            if (linkResult.rows.length === 0) {
+                                tx.executeSql(
+                                    `INSERT INTO deck_cards (deck_id, card_id) VALUES (?, ?)`,
+                                    [deckId, item.id],
+                                    () => resolve(`Card linked to deck`),
+                                    (_, linkError) => reject(`Failed to link card to deck: ${linkError}`)
+                                );
+                            } else {
+                                resolve('Card already linked to deck');
+                            }
+                        },
+                        (_, checkLinkError) => reject(`Failed to check if card is linked to deck: ${checkLinkError}`)
+                    );
                 },
-                (_, error) => {
-                    console.error(`Error fetching cards for deck ${deckId}:`, error);
-                    reject(error);
-                }
+                (_, checkError) => reject(`Failed to check if card exists: ${checkError}`)
             );
         });
     });
 };
+
+
 
 export const getAllCards = () => {
     return new Promise((resolve, reject) => {
@@ -103,7 +166,7 @@ export const getAllCards = () => {
                 'SELECT * FROM cards',
                 [],
                 (_, result) => {
-                    //console.log('Cards fetched successfully');
+                    console.log('Cards fetched successfully');
                     resolve(result);
                 },
                 (_, error) => {
@@ -251,7 +314,7 @@ export const insertDeck = (deck, cards) => {
                                     tx.executeSql(
                                         `INSERT INTO deck_cards (deck_id, card_id, copies) VALUES (?, ?, ?)`,
                                         [deckId, cardId, card.copies],
-                                        () => console.log(`Linked existing card ID ${card.name} to new deck ID ${deckId}`)
+                                        //() => console.log(`Linked existing card ID ${card.name} to new deck ID ${deckId}`)
                                     );
                                 } else {
                                     // Card doesn't exist, insert the card and then link it
@@ -278,6 +341,44 @@ export const insertDeck = (deck, cards) => {
 };
 
 
+export const getCardNamesForDeck = (deckId) => {
+    return new Promise((resolve, reject) => {
+        console.log(`Fetching cards for deck ID: ${deckId}`); // Log the deckId
+        db.transaction(tx => {
+            tx.executeSql(
+                `SELECT c.name FROM cards c 
+                 INNER JOIN deck_cards dc ON c.id = dc.card_id 
+                 WHERE dc.deck_id = ?`,
+                [deckId],
+                (tx, results) => {
+                    console.log(`Query returned ${results.rows.length} results`); // Log number of results
+                    let cardNames = [];
+
+                    for (let i = 0; i < results.rows.length; i++) {
+                        cardNames.push(results.rows.item(i).name);
+                    }
+
+                    if (cardNames.length > 0) {
+                        console.log(`Card names: ${cardNames.join(', ')}`); // Log card names
+                    } else {
+                        console.log('No cards found for this deck.'); // Log if no cards found
+                    }
+
+                    const cardNamesString = cardNames.join(', ');
+                    resolve(cardNamesString);
+                },
+                (tx, error) => {
+                    console.error('Query failed:', error); // Log if query fails
+                    reject(error);
+                }
+            );
+        });
+    });
+};
+
+
+
+
 
 export const addNewDeckDB = (DeckName, GameName, Description, setModalVisible, refreshDecks, onChangeDeckName, onChangeGameName, onChangeDescription) => {
     // Check if the deck name already exists
@@ -293,8 +394,8 @@ export const addNewDeckDB = (DeckName, GameName, Description, setModalVisible, r
             .then(() => {
                 setModalVisible(false); // Close the modal
                 refreshDecks(); // Refresh the decks list
-                onChangeDeckName('New Deck'); // Reset deck name input
-                onChangeGameName('Game Name'); // Reset game name input
+                onChangeDeckName(''); // Reset deck name input
+                onChangeGameName(''); // Reset game name input
                 onChangeDescription(''); // Reset description input
                 Alert.alert('Success', 'New deck added successfully.');
             })
@@ -307,8 +408,6 @@ export const addNewDeckDB = (DeckName, GameName, Description, setModalVisible, r
         Alert.alert('Error', 'Failed to fetch existing decks. Please try again.');
     });
 };
-
-
 
 const addNewDeck = () => {
     setModalVisible(true);
